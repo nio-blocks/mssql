@@ -1,7 +1,7 @@
+import pyodbc
 from nio.block.base import Block
 from nio.properties import VersionProperty, StringProperty, PropertyHolder, ObjectProperty, IntProperty
 from nio.signal.base import Signal
-import pyodbc
 from nio.util.discovery import not_discoverable
 
 class Credentials(PropertyHolder):

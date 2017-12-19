@@ -1,6 +1,5 @@
 from nio.properties import VersionProperty, Property
 from nio.signal.base import Signal
-import pyodbc
 from .mssql_base_block import MSSQLBase
 
 class MSSQLQuery(MSSQLBase):
