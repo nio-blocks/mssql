@@ -6,17 +6,6 @@ from ..mssql_base_block import MSSQLBase
 from ..mssql_query_block import MSSQLQuery
 
 
-class RowObject(object):
-
-    def __init__(self, a, b, c):
-        super().__init__()
-        self.a = a
-        self.b = b
-        self.c = c
-
-    def row(self):
-        return (self.a, self.b, self.c)
-
 class TestMSSQL(NIOBlockTestCase):
 
     _host = 'host'
@@ -39,14 +28,10 @@ class TestMSSQL(NIOBlockTestCase):
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
         mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
         mock_cursor.fetchall.return_value = [
-            RowObject(a=1.0, b=1.1, c=1.2).row(),
-            RowObject(a=2.0, b=2.1, c=2.2).row(),
-            RowObject(a=3.0, b=3.1, c=3.2).row()]
-        mock_cursor.description = (
-            ('a',),
-            ('b',),
-            ('c',)) # unused tuple values omitted
-        """Signals pass through block unmodified."""
+            (1.0, 1.1, 1.2),
+            (2.0, 2.1, 2.2),
+            (3.0, 3.1, 3.2)]
+        mock_cursor.description = (('a',), ('b',), ('c',))
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)
         blk.start()
@@ -76,5 +61,5 @@ class TestMSSQL(NIOBlockTestCase):
                 self._uid,
                 self._pw))
         mock_cnxn.cursor.assert_called_once()
-        mock_cnxn.cursor.return_value.execute.assert_called_once_with('SELECT * from foo')
+        mock_cursor.execute.assert_called_once_with('SELECT * from foo')
         mock_cnxn.close.assert_called_once()
