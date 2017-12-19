@@ -1,20 +1,21 @@
 from nio.block.base import Block
-from nio.properties import VersionProperty, StringProperty, PropertyHolder, ObjectProperty, Property
+from nio.properties import VersionProperty, StringProperty, PropertyHolder, ObjectProperty
 from nio.signal.base import Signal
 import pyodbc
+from nio.util.discovery import not_discoverable
 
 class Credentials(PropertyHolder):
 
     userid = StringProperty(title='User ID', allow_none=True)
     password = StringProperty(title="Password", allow_none=True)
 
-class MSSQL(Block):
+@not_discoverable
+class MSSQLBase(Block):
 
     version = VersionProperty('0.1.0')
     server = StringProperty(title='Server')
     database = StringProperty(title='Database')
     credentials = ObjectProperty(Credentials, title='Connection Credentials')
-    query = Property(title='Query', default='SELECT * from {{ $table }}')
 
     def __init__(self):
         super().__init__()
@@ -35,16 +36,6 @@ class MSSQL(Block):
                 self.credentials().password())
         raw_cnxn_string = '%r'%cnxn_string  # cast to raw string literal
         self.cnxn = pyodbc.connect(raw_cnxn_string[1:-1]) # strip extra quotes apparently
-
-    def process_signals(self, signals):
-        output_signals = []
-        cursor = self.cnxn.cursor()
-        for signal in signals:
-            rows = cursor.execute(self.query(signal)).fetchall()
-            for row in rows:
-                signal_dict = {key: getattr(row, key) for key in dir(row) if not key.startswith('__')}
-                output_signals.append(Signal(signal_dict))
-        self.notify_signals(output_signals)
 
     def stop(self):
         super().stop()
