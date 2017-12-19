@@ -14,6 +14,9 @@ class RowObject(object):
         self.b = b
         self.c = c
 
+    def row(self):
+        return (self.a, self.b, self.c)
+
 class TestMSSQL(NIOBlockTestCase):
 
     _host = 'host'
@@ -36,9 +39,13 @@ class TestMSSQL(NIOBlockTestCase):
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
         mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
         mock_cursor.fetchall.return_value = [
-            RowObject(a=1.0, b=1.1, c=1.2),
-            RowObject(a=2.0, b=2.1, c=2.2),
-            RowObject(a=3.0, b=3.1, c=3.2)]
+            RowObject(a=1.0, b=1.1, c=1.2).row(),
+            RowObject(a=2.0, b=2.1, c=2.2).row(),
+            RowObject(a=3.0, b=3.1, c=3.2).row()]
+        mock_cursor.description = (
+            ('a',),
+            ('b',),
+            ('c',)) # unused tuple values omitted
         """Signals pass through block unmodified."""
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)

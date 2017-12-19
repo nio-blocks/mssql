@@ -14,6 +14,7 @@ class MSSQLQuery(MSSQLBase):
         for signal in signals:
             rows = cursor.execute(self.query(signal)).fetchall()
             for row in rows:
-                signal_dict = {key: getattr(row, key) for key in dir(row) if not key.startswith('__')}
+                hashed_row = zip([r[0] for r in cursor.description], row)
+                signal_dict = {a:b for a, b in hashed_row}
                 output_signals.append(Signal(signal_dict))
         self.notify_signals(output_signals)
