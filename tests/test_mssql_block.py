@@ -17,13 +17,15 @@ class RowObject(object):
 class TestMSSQL(NIOBlockTestCase):
 
     _host = 'host'
+    _port = 314
     _db = 'db'
     _uid = 'user'
     _pw = 'pw'
     _driver = '{ODBC Driver 13 for SQL Server}'
     config = {
-        'server': 'host',
-        'database': 'db',
+        'server': _host,
+        'port': _port,
+        'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
         'query': 'SELECT * from {{ $table }}'}
 
@@ -55,11 +57,13 @@ class TestMSSQL(NIOBlockTestCase):
             {'a': 3.0, 'b': 3.1, 'c': 3.2})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
+            'PORT={};'
             'SERVER={};'
             'DATABASE={};'
             'UID={};'
             'PWD={}'.format(
                 self._driver,
+                self._port,
                 self._host,
                 self._db,
                 self._uid,
