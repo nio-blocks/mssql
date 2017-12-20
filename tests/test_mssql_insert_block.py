@@ -52,4 +52,5 @@ class TestMSSQLInsert(NIOBlockTestCase):
                 self._pw))
         mock_cnxn.cursor.assert_called_once()
         mock_cursor.execute.assert_called_once_with("INSERT INTO foo ('a', 'b', 'c') VALUES (1, 2, 3);")
+        mock_cursor.commit.assert_called_once()
         mock_cnxn.close.assert_called_once()

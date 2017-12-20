@@ -13,4 +13,5 @@ class MSSQLInsert(MSSQLBase):
         for signal in signals:
             result = cursor.execute(self.query(signal))
             output_signals.append(Signal({'inserted': result.rowcount}))
+        cursor.commit()    
         self.notify_signals(output_signals)
