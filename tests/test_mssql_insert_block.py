@@ -23,7 +23,6 @@ class TestMSSQLInsert(NIOBlockTestCase):
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
-        self.maxDiff = None
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
         mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
@@ -34,9 +33,9 @@ class TestMSSQLInsert(NIOBlockTestCase):
         blk.process_signals([Signal({'table': 'foo', 'columns': ('a', 'b', 'c'), 'values': (1, 2, 3) })])
         blk.stop()
         self.assert_num_signals_notified(1)
-        # self.assertDictEqual(
-        #     self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-        #     {'inserted': 1})
+        self.assertDictEqual(
+            self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
+            {'inserted': 1})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'

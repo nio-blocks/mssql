@@ -23,7 +23,6 @@ class TestMSSQL(NIOBlockTestCase):
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
-        self.maxDiff = None
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
         mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
