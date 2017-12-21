@@ -31,8 +31,8 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.configure_block(blk, self.config)
         blk.start()
         blk.process_signals([
-            Signal({'a': 1, 'b': 2, 'c': 3}),
-            Signal({'a': 2, 'b': 3, 'c': 4})])
+            Signal({'a': 'a1', 'b': 2, 'c': 3}),
+            Signal({'a': 'a2', 'c': 3})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
@@ -55,9 +55,9 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.assertEqual(mock_cursor.execute.call_count, 2)
         self.assertEqual(
             mock_cursor.execute.call_args_list[0][0][0],
-            'INSERT INTO the_table (a, b, c) VALUES (1, 2, 3);')
+            'INSERT INTO the_table (a, b, c) VALUES (\'a1\', 2, 3);')
         self.assertEqual(
             mock_cursor.execute.call_args_list[1][0][0],
-            'INSERT INTO the_table (a, b, c) VALUES (2, 3, 4);')
+            'INSERT INTO the_table (a, c) VALUES (\'a2\', 3);')
         mock_cursor.commit.assert_called_once()
         mock_cnxn.close.assert_called_once()

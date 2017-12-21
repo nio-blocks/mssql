@@ -17,11 +17,17 @@ class MSSQLInsert(MSSQLBase):
             vals = ''
             for key in row_dict:
                 cols += key + ', '
-                vals += str(row_dict[key]) + ', '
+                val = row_dict[key]
+                if isinstance(val, str):
+                    val = '\'' + val + '\''
+                vals += str(val) + ', '
             query = 'INSERT INTO {} ({}) VALUES ({});'.format(
                 self.table(signal),
                 cols[:-2],
                 vals[:-2])
+            self.logger.debug(cols[:-2])
+            self.logger.debug(vals[:-2])
+            self.logger.debug(query)
             result = cursor.execute(query)
             inserted += result.rowcount
         cursor.commit()
