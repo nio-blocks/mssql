@@ -30,12 +30,14 @@ class TestMSSQLInsert(NIOBlockTestCase):
         blk = MSSQLInsert()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'a': 1, 'b': 2, 'c': 3})])
+        blk.process_signals([
+            Signal({'a': 1, 'b': 2, 'c': 3}),
+            Signal({'a': 2, 'b': 3, 'c': 4})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
             self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-            {'inserted': 1})
+            {'inserted': 2})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
@@ -50,7 +52,12 @@ class TestMSSQLInsert(NIOBlockTestCase):
                 self._uid,
                 self._pw))
         mock_cnxn.cursor.assert_called_once()
-        mock_cursor.execute.assert_called_once_with(
+        self.assertEqual(mock_cursor.execute.call_count, 2)
+        self.assertEqual(
+            mock_cursor.execute.call_args_list[0][0][0],
             'INSERT INTO the_table (a, b, c) VALUES (1, 2, 3);')
+        self.assertEqual(
+            mock_cursor.execute.call_args_list[1][0][0],
+            'INSERT INTO the_table (a, b, c) VALUES (2, 3, 4);')
         mock_cursor.commit.assert_called_once()
         mock_cnxn.close.assert_called_once()

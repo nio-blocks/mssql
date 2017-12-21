@@ -10,7 +10,7 @@ class MSSQLInsert(MSSQLBase):
 
     def process_signals(self, signals):
         cursor = self.cnxn.cursor()
-        output_signals = []
+        inserted = 0
         for signal in signals:
             row_dict = self.row(signal)
             cols = ''
@@ -23,6 +23,6 @@ class MSSQLInsert(MSSQLBase):
                 cols[:-2],
                 vals[:-2])
             result = cursor.execute(query)
-            output_signals.append(Signal({'inserted': result.rowcount}))
-        cursor.commit()    
-        self.notify_signals(output_signals)
+            inserted += result.rowcount
+        cursor.commit()
+        self.notify_signals(Signal({'inserted': inserted}))
