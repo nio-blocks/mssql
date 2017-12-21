@@ -19,7 +19,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
         'port': _port,
         'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
-        'query': 'INSERT INTO {{$table}} {{$columns}} VALUES {{$values}};'}
+        'table': 'the_table'}
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
@@ -30,7 +30,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
         blk = MSSQLInsert()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'table': 'foo', 'columns': ('a', 'b', 'c'), 'values': (1, 2, 3) })])
+        blk.process_signals([Signal({'a': 1, 'b': 2, 'c': 3})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
@@ -50,6 +50,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
                 self._uid,
                 self._pw))
         mock_cnxn.cursor.assert_called_once()
-        mock_cursor.execute.assert_called_once_with("INSERT INTO foo ('a', 'b', 'c') VALUES (1, 2, 3);")
+        mock_cursor.execute.assert_called_once_with(
+            "INSERT INTO the_table (a, b, c) VALUES (1, 2, 3);")
         mock_cursor.commit.assert_called_once()
         mock_cnxn.close.assert_called_once()
