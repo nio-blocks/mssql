@@ -19,6 +19,8 @@ class MSSQLInsert(MSSQLBase):
                 cols += key + ', '
                 val = row_dict[key]
                 if isinstance(val, str):
+                    # double-up quote chars to escape without backslash hell
+                    val = val.replace('\'', '\'\'').replace('\"', '\"\"')
                     val = '\'' + val + '\''
                 vals += str(val) + ', '
             query = 'INSERT INTO {} ({}) VALUES ({});'.format(
