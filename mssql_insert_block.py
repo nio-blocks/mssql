@@ -27,9 +27,7 @@ class MSSQLInsert(MSSQLBase):
                 self.table(signal),
                 cols[:-2],
                 vals[:-2])
-            self.logger.debug(cols[:-2])
-            self.logger.debug(vals[:-2])
-            self.logger.debug(query)
+            self.logger.debug('Executing {}'.format(query))
             result = cursor.execute(query)
             inserted += result.rowcount
         cursor.commit()
