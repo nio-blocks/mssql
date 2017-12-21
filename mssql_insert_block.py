@@ -1,17 +1,28 @@
-from nio.properties import VersionProperty, Property
+from nio.properties import VersionProperty, StringProperty, Property
 from nio.signal.base import Signal
 from .mssql_base_block import MSSQLBase
 
 class MSSQLInsert(MSSQLBase):
 
     version = VersionProperty('0.1.0')
-    query = Property(title='Query', default='INSERT INTO {{$table}} {{$columns}} VALUES {{$values}};')
+    row = Property(title='Row', default='{{ $.to_dict() }}')
+    table = StringProperty(title='Target Table', default='')
 
     def process_signals(self, signals):
-        output_signals = []
         cursor = self.cnxn.cursor()
+        inserted = 0
         for signal in signals:
-            result = cursor.execute(self.query(signal))
-            output_signals.append(Signal({'inserted': result.rowcount}))
-        cursor.commit()    
-        self.notify_signals(output_signals)
+            row_dict = self.row(signal)
+            cols = ''
+            vals = ''
+            for key in row_dict:
+                cols += key + ', '
+                vals += str(row_dict[key]) + ', '
+            query = 'INSERT INTO {} ({}) VALUES ({});'.format(
+                self.table(signal),
+                cols[:-2],
+                vals[:-2])
+            result = cursor.execute(query)
+            inserted += result.rowcount
+        cursor.commit()
+        self.notify_signals(Signal({'inserted': inserted}))
