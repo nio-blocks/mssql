@@ -37,6 +37,7 @@ class MSSQLBase(Block):
                 self.database(),
                 self.credentials().userid(),
                 self.credentials().password())
+        self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
 
     def stop(self):
