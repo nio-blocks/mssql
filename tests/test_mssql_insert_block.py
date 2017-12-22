@@ -30,8 +30,8 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.configure_block(blk, self.config)
         blk.start()
         blk.process_signals([
-            Signal({'a': 'a\"1', 'b': 2, 'c': 3}), # a contains a double quote
-            Signal({'a': 'a\'2', 'c': 3})]) # a contains a single quote
+            Signal({'a': 'a\"1', 'b': 2, 'c': 3}), # a contains double quote
+            Signal({'a': 'a\'2', 'c': 3})]) # contains single quote
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
