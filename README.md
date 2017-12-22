@@ -37,7 +37,7 @@ Properties
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of database to connect to
 - **port**: server port number
-- **query**: Query to execute
+- **query**: SQL query to execute
 - **server**: server hostname or address
 
 Inputs

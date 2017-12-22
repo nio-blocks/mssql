@@ -83,7 +83,7 @@
       "query": {
         "title": "Query",
         "type": "Type",
-        "description": "Query to execute",
+        "description": "SQL query to execute",
         "default": "SELECT * from {{ $table }}"
       },
       "server": {
