@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 from nio.block.terminals import DEFAULT_TERMINAL
 from nio.signal.base import Signal
 from nio.testing.block_test_case import NIOBlockTestCase
-from ..mssql_base_block import MSSQLBase
+from ..mssql_base import MSSQLBase
 from ..mssql_insert_block import MSSQLInsert
 
 
