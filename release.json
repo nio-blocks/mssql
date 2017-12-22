@@ -1,7 +1,12 @@
 {
-  "namespace/BlockName": {
+  "nio/MSSQLInsert": {
     "language": "Python",
-    "version": "0.0.1",
-    "reference": "github.com/<organization>/<repo>@v0.0.1"
+    "url": "git://github.com/tyoungNIO/mssql.git",
+    "version": "0.1.0"
+  },
+  "nio/MSSQLQuery": {
+    "language": "Python",
+    "url": "git://github.com/tyoungNIO/mssql.git",
+    "version": "0.1.0"
   }
 }

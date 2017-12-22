@@ -1,13 +1,16 @@
 import pyodbc
 from nio.block.base import Block
-from nio.properties import VersionProperty, StringProperty, PropertyHolder, ObjectProperty, IntProperty
+from nio.properties import (VersionProperty, StringProperty, PropertyHolder,
+                            ObjectProperty, IntProperty)
 from nio.signal.base import Signal
 from nio.util.discovery import not_discoverable
+
 
 class Credentials(PropertyHolder):
 
     userid = StringProperty(title='User ID', allow_none=True)
     password = StringProperty(title="Password", allow_none=True)
+
 
 @not_discoverable
 class MSSQLBase(Block):

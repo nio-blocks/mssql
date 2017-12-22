@@ -2,6 +2,7 @@ from nio.properties import VersionProperty, StringProperty, Property
 from nio.signal.base import Signal
 from .mssql_base_block import MSSQLBase
 
+
 class MSSQLInsert(MSSQLBase):
 
     version = VersionProperty('0.1.0')

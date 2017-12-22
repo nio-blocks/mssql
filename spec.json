@@ -1,40 +1,108 @@
 {
-  "namespace/BlockName": {
-    "version": "1.0.0",
-    "description": "Description of the block.",
+  "nio/MSSQLInsert": {
+    "version": "0.1.0",
+    "description": "Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.",
     "properties": {
-      "<property1>": {
-        "description": "Required description of the property"
+      "credentials": {
+        "title": "Connection Credentials",
+        "type": "ObjectType",
+        "description": "UID and PWD used for database authentication",
+        "default": {
+          "userid": null,
+          "password": null
+        }
       },
-      "<property2>": {
-        "default": "Optional metadata with any key.",
-        "description": "Required description of the property"
+      "database": {
+        "title": "Database",
+        "type": "StringType",
+        "description": "name of database to connect to",
+        "default": null
+      },
+      "port": {
+        "title": "Port",
+        "type": "IntType",
+        "description": "server port number",
+        "default": null
+      },
+      "row": {
+        "title": "Row",
+        "type": "Type",
+        "description": "record to be inserted as {key: value} pairs",
+        "default": "{{ $.to_dict() }}"
+      },
+      "server": {
+        "title": "Server",
+        "type": "StringType",
+        "description": "server hostname or address",
+        "default": null
+      },
+      "table": {
+        "title": "Target Table",
+        "type": "StringType",
+        "description": "database table to be affected",
+        "default": ""
       }
     },
     "inputs": {
-      "<input1 | default>": {
-        "description": "Required description of the input"
-      },
-      "<input2>": {
-        "description": "Required description of the input"
+      "default": {
+        "description": "A list of signals with one record to insert per signal"
       }
     },
     "outputs": {
-      "<output1 | default>": {
-        "description": "Required description of the output"
-      },
-      "<output2>": {
-        "description": "Required description of the output"
+      "default": {
+        "description": "One signal per list of signals processed, with the attribute `inserted` containing the number of records inserted"
       }
     },
-    "commands": {
-      "<command1>": {
-        "description": "Required description of the command",
-        "type": "Optional type and other metadata with any key."
+    "commands": {}
+  },
+  "nio/MSSQLQuery": {
+    "version": "0.1.0",
+    "description": "Creates a cursor object for every list of signals, and executes one query per signal returning all matching records in a new list of signals.",
+    "properties": {
+      "credentials": {
+        "title": "Connection Credentials",
+        "type": "ObjectType",
+        "description": "UID and PWD used for database authentication",
+        "default": {
+          "userid": null,
+          "password": null
+        }
       },
-      "<command2>": {
-        "description": "Required description of the command"
+      "database": {
+        "title": "Database",
+        "type": "StringType",
+        "description": "name of database to connect to",
+        "default": null
+      },
+      "port": {
+        "title": "Port",
+        "type": "IntType",
+        "description": "server port number",
+        "default": null
+      },
+      "query": {
+        "title": "Query",
+        "type": "Type",
+        "description": "Query to execute",
+        "default": "SELECT * from {{ $table }}"
+      },
+      "server": {
+        "title": "Server",
+        "type": "StringType",
+        "description": "server hostname or address",
+        "default": null
       }
-    }
+    },
+    "inputs": {
+      "default": {
+        "description": "Any list of signals"
+      }
+    },
+    "outputs": {
+      "default": {
+        "description": "One list of signals for every query executed, where each signal contains one record as {key: value} pairs"
+      }
+    },
+    "commands": {}
   }
 }
