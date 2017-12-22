@@ -7,7 +7,7 @@ Properties
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of database to connect to
 - **port**: server port number
-- **row**: record to be inserted as {key: value} pairs
+- **row**: record to be inserted as `{key: value}` pairs
 - **server**: server hostname or address
 - **table**: database table to be affected
 
@@ -25,7 +25,7 @@ None
 
 Dependencies
 ------------
-pyodbc  
+pyodbc
 [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
 
 MSSQLQuery
@@ -46,7 +46,7 @@ Inputs
 
 Outputs
 -------
-- **default**: One list of signals for every query executed, where each signal contains one record as {key: value} pairs
+- **default**: One list of signals for every query executed, where each signal contains one record as `{key: value}` pairs
 
 Commands
 --------
@@ -54,6 +54,6 @@ None
 
 Dependencies
 ------------
-pyodbc  
+pyodbc
 [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
 

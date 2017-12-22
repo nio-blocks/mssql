@@ -27,7 +27,7 @@
       "row": {
         "title": "Row",
         "type": "Type",
-        "description": "record to be inserted as {key: value} pairs",
+        "description": "record to be inserted as `{key: value}` pairs",
         "default": "{{ $.to_dict() }}"
       },
       "server": {
@@ -100,7 +100,7 @@
     },
     "outputs": {
       "default": {
-        "description": "One list of signals for every query executed, where each signal contains one record as {key: value} pairs"
+        "description": "One list of signals for every query executed, where each signal contains one record as `{key: value}` pairs"
       }
     },
     "commands": {}
