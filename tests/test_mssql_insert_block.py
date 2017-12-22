@@ -59,4 +59,5 @@ class TestMSSQLInsert(NIOBlockTestCase):
             mock_cursor.execute.call_args_list[1][0][0],
             'INSERT INTO the_table (a, c) VALUES (\'a\'\'2\', 3);')
         mock_cursor.commit.assert_called_once()
+        mock_cursor.close.assert_called_once()
         mock_cnxn.close.assert_called_once()

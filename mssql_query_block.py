@@ -19,4 +19,5 @@ class MSSQLQuery(MSSQLBase):
                 hashed_row = zip([r[0] for r in cursor.description], row)
                 signal_dict = {a:b for a, b in hashed_row}
                 output_signals.append(Signal(signal_dict))
+        cursor.close()
         self.notify_signals(output_signals)

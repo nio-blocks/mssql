@@ -31,5 +31,6 @@ class MSSQLInsert(MSSQLBase):
             result = cursor.execute(query)
             inserted += result.rowcount
         cursor.commit()
+        cursor.close()
         self.logger.debug('Rows committed: {}'.format(inserted))
         self.notify_signals(Signal({'inserted': inserted}))
