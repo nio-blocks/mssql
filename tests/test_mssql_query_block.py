@@ -25,7 +25,7 @@ class TestMSSQL(NIOBlockTestCase):
     def test_process_signals(self, mock_odbc):
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
-        mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
+        mock_cursor.execute.return_value = mock_cursor
         mock_cursor.fetchall.return_value = [
             (1.0, 1.1, 1.2),
             (2.0, 2.1, 2.2),
@@ -61,4 +61,5 @@ class TestMSSQL(NIOBlockTestCase):
                 self._pw))
         mock_cnxn.cursor.assert_called_once()
         mock_cursor.execute.assert_called_once_with('SELECT * from foo')
+        mock_cursor.close.assert_called_once()
         mock_cnxn.close.assert_called_once()

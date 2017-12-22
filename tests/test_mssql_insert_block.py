@@ -25,14 +25,13 @@ class TestMSSQLInsert(NIOBlockTestCase):
     def test_process_signals(self, mock_odbc):
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
-        mock_cnxn.cursor.return_value.execute.return_value = mock_cursor
-        mock_cursor.rowcount = 1
+        mock_cursor.execute.return_value = MagicMock(rowcount=1)
         blk = MSSQLInsert()
         self.configure_block(blk, self.config)
         blk.start()
         blk.process_signals([
-            Signal({'a': 1, 'b': 2, 'c': 3}),
-            Signal({'a': 2, 'b': 3, 'c': 4})])
+            Signal({'a': 'a\"1', 'b': 2, 'c': 3}), # a contains double quote
+            Signal({'a': 'a\'2', 'c': 3})]) # contains single quote
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
@@ -55,9 +54,10 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.assertEqual(mock_cursor.execute.call_count, 2)
         self.assertEqual(
             mock_cursor.execute.call_args_list[0][0][0],
-            'INSERT INTO the_table (a, b, c) VALUES (1, 2, 3);')
+            'INSERT INTO the_table (a, b, c) VALUES (\'a\"\"1\', 2, 3);')
         self.assertEqual(
             mock_cursor.execute.call_args_list[1][0][0],
-            'INSERT INTO the_table (a, b, c) VALUES (2, 3, 4);')
+            'INSERT INTO the_table (a, c) VALUES (\'a\'\'2\', 3);')
         mock_cursor.commit.assert_called_once()
+        mock_cursor.close.assert_called_once()
         mock_cnxn.close.assert_called_once()

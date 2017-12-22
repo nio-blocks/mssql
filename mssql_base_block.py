@@ -37,8 +37,8 @@ class MSSQLBase(Block):
                 self.database(),
                 self.credentials().userid(),
                 self.credentials().password())
-        raw_cnxn_string = '%r'%cnxn_string  # cast to raw string literal
-        self.cnxn = pyodbc.connect(raw_cnxn_string[1:-1]) # strip extra quotes apparently
+        self.logger.debug('Connecting: {}'.format(cnxn_string))
+        self.cnxn = pyodbc.connect(cnxn_string)
 
     def stop(self):
         super().stop()

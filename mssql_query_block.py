@@ -11,9 +11,13 @@ class MSSQLQuery(MSSQLBase):
         output_signals = []
         cursor = self.cnxn.cursor()
         for signal in signals:
-            rows = cursor.execute(self.query(signal)).fetchall()
+            query = self.query(signal)
+            self.logger.debug('Executing: {}'.format(query))
+            rows = cursor.execute(query).fetchall()
+            self.logger.debug('Rows returned: {}'.format(len(rows)))
             for row in rows:
                 hashed_row = zip([r[0] for r in cursor.description], row)
                 signal_dict = {a:b for a, b in hashed_row}
                 output_signals.append(Signal(signal_dict))
+        cursor.close()
         self.notify_signals(output_signals)
