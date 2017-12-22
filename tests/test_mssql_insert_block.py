@@ -25,7 +25,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
     def test_process_signals(self, mock_odbc):
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
-        mock_result = mock_cursor.execute.return_value = MagicMock(rowcount=1)
+        mock_cursor.execute.return_value = MagicMock(rowcount=1)
         blk = MSSQLInsert()
         self.configure_block(blk, self.config)
         blk.start()
