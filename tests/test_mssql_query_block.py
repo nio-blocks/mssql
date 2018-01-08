@@ -59,7 +59,7 @@ class TestMSSQL(NIOBlockTestCase):
                 self._db,
                 self._uid,
                 self._pw))
-        mock_cnxn.cursor.assert_called_once()
+        self.assertEqual(mock_cnxn.cursor.call_count, 1)
         mock_cursor.execute.assert_called_once_with('SELECT * from foo')
-        mock_cursor.close.assert_called_once()
-        mock_cnxn.close.assert_called_once()
+        self.assertEqual(mock_cursor.close.call_count, 1)
+        self.assertEqual(mock_cnxn.close.call_count, 1)
