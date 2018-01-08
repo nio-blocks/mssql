@@ -1,8 +1,10 @@
 from nio.properties import VersionProperty, Property
 from nio.signal.base import Signal
+from nio.block.terminals import output
 from .mssql_base import MSSQLBase
 
-
+@output('results', label='Results')
+@output('no_results', label='No Results')
 class MSSQLQuery(MSSQLBase):
 
     version = VersionProperty('0.1.0')
@@ -29,4 +31,8 @@ class MSSQLQuery(MSSQLBase):
                     signal_dict = {a: b for a, b in hashed_row}
                     output_signals.append(Signal(signal_dict))
             cursor.close()
-            self.notify_signals(output_signals)
+
+            if len(output_signals) > 0:
+                self.notify_signals(output_signals, output_id='results')
+            else:
+                self.notify_signals(Signal({'results': 'null'}), output_id='no_results')
