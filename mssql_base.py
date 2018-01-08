@@ -24,9 +24,14 @@ class MSSQLBase(Block):
     def __init__(self):
         super().__init__()
         self.cnxn = None
+        self.isConnecting = False
 
     def configure(self, context):
         super().configure(context)
+        self.connect()
+
+    def connect(self):
+        self.isConnecting = True
         cnxn_string = (
             'DRIVER={};'
             'PORT={};'
@@ -42,6 +47,7 @@ class MSSQLBase(Block):
                 self.credentials().password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
+        self.isConnecting = False
 
     def stop(self):
         super().stop()
