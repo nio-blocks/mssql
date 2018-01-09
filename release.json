@@ -1,12 +1,12 @@
 {
   "nio/MSSQLInsert": {
     "language": "Python",
-    "url": "git://github.com/tyoungNIO/mssql.git",
+    "url": "git://github.com/nio-blocks/mssql.git",
     "version": "0.1.0"
   },
   "nio/MSSQLQuery": {
     "language": "Python",
-    "url": "git://github.com/tyoungNIO/mssql.git",
+    "url": "git://github.com/nio-blocks/mssql.git",
     "version": "0.1.0"
   }
 }

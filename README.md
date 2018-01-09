@@ -25,7 +25,7 @@ None
 
 Dependencies
 ------------
-- pyodbc  
+- pyodbc
 - [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
 
 MSSQLQuery
@@ -46,7 +46,8 @@ Inputs
 
 Outputs
 -------
-- **default**: One list of signals for every query executed, where each signal contains one record as `{key: value}` pairs
+- **No Results**: One signal, with a return value null
+- **Results**: One signal per list of signals processed, with the attribute inserted containing the number of records inserted 
 
 Commands
 --------
@@ -54,6 +55,6 @@ None
 
 Dependencies
 ------------
-- pyodbc  
+- pyodbc
 - [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
 
