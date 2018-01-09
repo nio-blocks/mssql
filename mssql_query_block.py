@@ -18,7 +18,7 @@ class MSSQLQuery(MSSQLBase):
             try:
                 cursor = self.cnxn.cursor()
             except e:
-                if e.__class__ == pyodbc.ProgrammingError:
+                if e.__class__ == pyodbc.OperationalError:
                     conn = self.connect()
                     cursor = self.cnxn.cursor()
             for signal in signals:
