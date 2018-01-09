@@ -2,6 +2,7 @@
   "nio/MSSQLInsert": {
     "version": "0.1.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.",
+    "categories": [],
     "properties": {
       "credentials": {
         "title": "Connection Credentials",
@@ -58,6 +59,7 @@
   "nio/MSSQLQuery": {
     "version": "0.1.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal returning all matching records in a new list of signals.",
+    "categories": [],
     "properties": {
       "credentials": {
         "title": "Connection Credentials",
@@ -99,8 +101,11 @@
       }
     },
     "outputs": {
-      "default": {
-        "description": "One list of signals for every query executed, where each signal contains one record as `{key: value}` pairs"
+      "No Results": {
+        "description": "One signal, with a return value null"
+      },
+      "Results": {
+        "description": "One signal per list of signals processed, with the attribute inserted containing the number of records inserted "
       }
     },
     "commands": {}
