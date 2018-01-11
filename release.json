@@ -1,4 +1,9 @@
 {
+  "nio/MSSQLDelete": {
+    "language": "Python",
+    "url": "git://github.com/nio-blocks/mssql.git",
+    "version": "0.1.0"
+  },
   "nio/MSSQLInsert": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/mssql.git",

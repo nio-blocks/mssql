@@ -1,3 +1,27 @@
+MSSQLDelete
+===========
+Creates a cursor object for an incoming signal and executes one command per signal.
+
+Properties
+----------
+- **command**: 
+- **credentials**: UID and PWD used for database authentication
+- **database**: name of databse to connect to
+- **port**: server port number
+- **server**: server hostname or address
+
+Inputs
+------
+- **default**: any list of signals
+
+Outputs
+-------
+- **default**: A signal with the number of rows deleted
+
+Commands
+--------
+None
+
 MSSQLInsert
 ===========
 Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.
