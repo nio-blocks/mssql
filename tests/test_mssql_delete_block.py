@@ -19,7 +19,7 @@ class TestMSSQL(NIOBlockTestCase):
         'port': _port,
         'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
-        'modify': 'DELETE * from {{ $table }}'}
+        'command': 'DELETE * from {{ $table }}'}
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
