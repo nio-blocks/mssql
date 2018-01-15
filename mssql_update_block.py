@@ -24,6 +24,7 @@ class MSSQLUpdate(MSSQLBase):
                 self.logger.debug('Executing: {}'.format(update))
                 rows = cursor.execute(update).rowcount
                 self.logger.debug('Rows updated: {}'.format(rows))
+            cursor.commit()
             cursor.close()
 
             self.notify_signals(Signal({'Rows updated': rows}))
