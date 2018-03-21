@@ -1,6 +1,7 @@
 from nio.properties import VersionProperty, StringProperty, Property
 from nio.signal.base import Signal
 from .mssql_base import MSSQLBase
+from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
 
 class MSSQLInsert(MSSQLBase):
@@ -11,7 +12,8 @@ class MSSQLInsert(MSSQLBase):
 
     def process_signals(self, signals):
         if self.isConnecting:
-            self.logger.error('Connection already in progress. Dropping signals.')
+            self.logger.error(
+                'Connection already in progress. Dropping signals.')
         else:
             output_signals = []
             try:
@@ -29,7 +31,7 @@ class MSSQLInsert(MSSQLBase):
                     cols += key + ', '
                     val = row_dict[key]
                     if isinstance(val, str):
-                        # double-up quote chars to escape without backslash hell
+                        #double-up quote chars to escape without backslash
                         val = val.replace('\'', '\'\'').replace('\"', '\"\"')
                         val = '\'' + val + '\''
                     vals += str(val) + ', '
