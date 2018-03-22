@@ -37,10 +37,10 @@ class TestMSSQLInsert(NIOBlockTestCase):
             Signal(signal_0),  # a contains double quote
             Signal(signal_1)])  # contains single quote
         blk.stop()
-        self.assert_num_signals_notified(1)
+        self.assert_num_signals_notified(2)
         self.assertDictEqual(
             self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-            {'inserted': 2})
+            {'inserted': 1})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'

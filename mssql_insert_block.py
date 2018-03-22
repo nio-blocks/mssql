@@ -4,7 +4,7 @@ from .mssql_base import MSSQLBase
 from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
 
-class MSSQLInsert(MSSQLBase):
+class MSSQLInsert(EnrichSignals, MSSQLBase):
 
     version = VersionProperty('0.1.0')
     row = Property(title='Row', default='{{ $.to_dict() }}')
@@ -31,7 +31,7 @@ class MSSQLInsert(MSSQLBase):
                     cols += key + ', '
                     val = row_dict[key]
                     if isinstance(val, str):
-                        #double-up quote chars to escape without backslash
+                        # double-up quote chars to escape without backslash hell
                         val = val.replace('\'', '\'\'').replace('\"', '\"\"')
                         val = '\'' + val + '\''
                     vals += str(val) + ', '
@@ -42,7 +42,10 @@ class MSSQLInsert(MSSQLBase):
                 self.logger.debug('Executing: {}'.format(query))
                 result = cursor.execute(query)
                 inserted += result.rowcount
+                output_signals.append(self.get_output_signal(
+                    {'inserted': inserted}, signal))
+                self.logger.error(signal)
             cursor.commit()
             cursor.close()
             self.logger.debug('Rows committed: {}'.format(inserted))
-            self.notify_signals(Signal({'inserted': inserted}))
+            self.notify_signals(output_signals)

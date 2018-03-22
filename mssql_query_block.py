@@ -39,5 +39,6 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
             if len(output_signals) > 0:
                 self.notify_signals(output_signals, output_id='results')
             else:
-                self.notify_signals(self.get_output_signal(
-                    {'results': 'null'}, signals), output_id='no_results')
+                output_signals.append(self.get_output_signal(
+                    {'results': 'null'}, signals[0]))
+                self.notify_signals(output_signals, output_id='no_results')
