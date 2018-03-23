@@ -19,7 +19,9 @@ class TestMSSQL(NIOBlockTestCase):
         'port': _port,
         'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
-        'query': 'SELECT * from {{ $table }}'}
+        'query': 'SELECT * from {{ $table }}',
+        'enrich': {'exclude_existing': False}
+    }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
@@ -39,13 +41,13 @@ class TestMSSQL(NIOBlockTestCase):
         self.assert_num_signals_notified(3)
         self.assertDictEqual(
             self.last_notified['results'][0].to_dict(),
-            {'a': 1.0, 'b': 1.1, 'c': 1.2})
+            {'a': 1.0, 'b': 1.1, 'c': 1.2, 'table': 'foo'})
         self.assertDictEqual(
             self.last_notified['results'][1].to_dict(),
-            {'a': 2.0, 'b': 2.1, 'c': 2.2})
+            {'a': 2.0, 'b': 2.1, 'c': 2.2, 'table': 'foo'})
         self.assertDictEqual(
             self.last_notified['results'][2].to_dict(),
-            {'a': 3.0, 'b': 3.1, 'c': 3.2})
+            {'a': 3.0, 'b': 3.1, 'c': 3.2, 'table': 'foo'})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
@@ -78,7 +80,8 @@ class TestMSSQL(NIOBlockTestCase):
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
-            self.last_notified['no_results'][0].to_dict(), {'results': 'null'})
+            self.last_notified['no_results'][0].to_dict(),
+                    {'results': 'null', 'table': 'foo'})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'

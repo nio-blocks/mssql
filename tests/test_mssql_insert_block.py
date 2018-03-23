@@ -20,6 +20,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
         'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
         'table': 'the_table',
+        'enrich': {'exclude_existing': False}
     }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
@@ -41,7 +42,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
             self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-            {'inserted': 2})
+            {'a': "a'2", 'c': 3, 'inserted': 2})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
