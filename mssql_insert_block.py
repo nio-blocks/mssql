@@ -1,9 +1,10 @@
 from nio.properties import VersionProperty, StringProperty, Property
 from nio.signal.base import Signal
 from .mssql_base import MSSQLBase
+from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
 
-class MSSQLInsert(MSSQLBase):
+class MSSQLInsert(EnrichSignals, MSSQLBase):
 
     version = VersionProperty('0.1.0')
     row = Property(title='Row', default='{{ $.to_dict() }}')
@@ -11,7 +12,8 @@ class MSSQLInsert(MSSQLBase):
 
     def process_signals(self, signals):
         if self.isConnecting:
-            self.logger.error('Connection already in progress. Dropping signals.')
+            self.logger.error(
+                'Connection already in progress. Dropping signals.')
         else:
             output_signals = []
             try:
@@ -40,7 +42,9 @@ class MSSQLInsert(MSSQLBase):
                 self.logger.debug('Executing: {}'.format(query))
                 result = cursor.execute(query)
                 inserted += result.rowcount
+            output_signals.append(self.get_output_signal(
+                {'inserted': inserted}, signal))
             cursor.commit()
             cursor.close()
             self.logger.debug('Rows committed: {}'.format(inserted))
-            self.notify_signals(Signal({'inserted': inserted}))
+            self.notify_signals(output_signals)
