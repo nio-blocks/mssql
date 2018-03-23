@@ -19,7 +19,8 @@ class TestMSSQLInsert(NIOBlockTestCase):
         'port': _port,
         'database': _db,
         'credentials': {'userid': _uid, 'password': _pw},
-        'table': 'the_table'}
+        'table': 'the_table',
+    }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
@@ -37,10 +38,10 @@ class TestMSSQLInsert(NIOBlockTestCase):
             Signal(signal_0),  # a contains double quote
             Signal(signal_1)])  # contains single quote
         blk.stop()
-        self.assert_num_signals_notified(2)
+        self.assert_num_signals_notified(1)
         self.assertDictEqual(
             self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-            {'inserted': 1})
+            {'inserted': 2})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'

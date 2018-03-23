@@ -42,9 +42,8 @@ class MSSQLInsert(EnrichSignals, MSSQLBase):
                 self.logger.debug('Executing: {}'.format(query))
                 result = cursor.execute(query)
                 inserted += result.rowcount
-                output_signals.append(self.get_output_signal(
-                    {'inserted': inserted}, signal))
-                self.logger.error(signal)
+            output_signals.append(self.get_output_signal(
+                {'inserted': inserted}, signal))
             cursor.commit()
             cursor.close()
             self.logger.debug('Rows committed: {}'.format(inserted))
