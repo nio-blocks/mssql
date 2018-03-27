@@ -4,7 +4,7 @@ Creates a cursor object for an incoming signal and executes one command per sign
 
 Properties
 ----------
-- **command**: 
+- **command**:
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of databse to connect to
 - **port**: server port number
@@ -21,6 +21,11 @@ Outputs
 Commands
 --------
 None
+
+Dependencies
+------------
+- pyodbc
+- [Microsoft ODBC Driver 17 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=56567)
 
 MSSQLInsert
 ===========
@@ -50,7 +55,7 @@ None
 Dependencies
 ------------
 - pyodbc
-- [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
+- [Microsoft ODBC Driver 17 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=56567)
 
 MSSQLQuery
 ==========
@@ -71,7 +76,7 @@ Inputs
 Outputs
 -------
 - **No Results**: One signal, with a return value null
-- **Results**: One signal per list of signals processed, with the attribute inserted containing the number of records inserted 
+- **Results**: One signal per list of signals processed, with the attribute inserted containing the number of records inserted
 
 Commands
 --------
@@ -80,5 +85,4 @@ None
 Dependencies
 ------------
 - pyodbc
-- [Microsoft ODBC Driver 13 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=50420)
-
+- [Microsoft ODBC Driver 17 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=56567)
