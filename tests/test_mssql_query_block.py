@@ -13,7 +13,7 @@ class TestMSSQL(NIOBlockTestCase):
     _db = 'db'
     _uid = 'user'
     _pw = 'pw'
-    _driver = '{ODBC Driver 13 for SQL Server}'
+    _driver = '{ODBC Driver 17 for SQL Server}'
     config = {
         'server': _host,
         'port': _port,
