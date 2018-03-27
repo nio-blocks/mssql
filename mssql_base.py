@@ -39,7 +39,7 @@ class MSSQLBase(Block):
             'DATABASE={};'
             'UID={};'
             'PWD={}').format(
-                '{ODBC Driver 13 for SQL Server}',
+                '{ODBC Driver 17 for SQL Server}',
                 self.port(),
                 self.server(),
                 self.database(),
