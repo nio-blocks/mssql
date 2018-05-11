@@ -49,6 +49,9 @@ class MSSQLBase(Block):
         self.cnxn = pyodbc.connect(cnxn_string)
         self.isConnecting = False
 
+    def disconnect(self):
+        self.cnxn.close()
+
     def stop(self):
         super().stop()
         self.cnxn.close()
