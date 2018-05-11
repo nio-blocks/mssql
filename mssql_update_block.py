@@ -16,9 +16,9 @@ class MSSQLUpdate(MSSQLBase):
             try:
                 cursor = self.cnxn.cursor()
             except e:
-                if e.__class__ == pyodbc.OperationalError:
-                    conn = self.connect()
-                    cursor = self.cnxn.cursor()
+                self.disconnect()
+                conn = self.connect()
+                cursor = self.cnxn.cursor()
             for signal in signals:
                 update = self.update(signal)
                 self.logger.debug('Executing: {}'.format(update))
