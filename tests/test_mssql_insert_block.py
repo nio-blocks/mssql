@@ -101,7 +101,7 @@ class TestMSSQLInsert(NIOBlockTestCase):
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
-    def test_process_signals(self, mock_odbc):
+    def test_exception_handling(self, mock_odbc):
         mock_cnxn = mock_odbc.connect.return_value = MagicMock()
         mock_cursor = mock_cnxn.cursor.side_effect = Exception()
         blk = MSSQLInsert()
