@@ -20,9 +20,9 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
             output_signals = []
             try:
                 cursor = self.cnxn.cursor()
-            except e:
+            except Exception as e:
                 self.disconnect()
-                conn = self.connect()
+                self.connect()
                 cursor = self.cnxn.cursor()
             for signal in signals:
                 query = self.query(signal)
