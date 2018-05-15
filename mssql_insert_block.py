@@ -18,10 +18,10 @@ class MSSQLInsert(EnrichSignals, MSSQLBase):
             output_signals = []
             try:
                 cursor = self.cnxn.cursor()
-            except e:
-                if e.__class__ == pyodbc.ProgrammingError:
-                    conn = self.connect()
-                    cursor = self.cnxn.cursor()
+            except Exception as e:
+                self.disconnect()
+                self.connect()
+                cursor = self.cnxn.cursor()
             inserted = 0
             for signal in signals:
                 row_dict = self.row(signal)

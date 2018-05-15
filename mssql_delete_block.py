@@ -16,10 +16,10 @@ class MSSQLDelete(MSSQLBase):
             output_signals = []
             try:
                 cursor = self.cnxn.cursor()
-            except e:
-                if e.__class__ == pyodbc.OperationalError:
-                    conn = self.connect()
-                    cursor = self.cnxn.cursor()
+            except Exception as e:
+                self.disconnect()
+                self.connect()
+                cursor = self.cnxn.cursor()
             for signal in signals:
                 command = self.command(signal)
                 self.logger.debug('Executing: {}'.format(command))
