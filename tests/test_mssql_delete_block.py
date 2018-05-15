@@ -54,3 +54,19 @@ class TestMSSQL(NIOBlockTestCase):
         mock_cursor.execute.assert_called_once_with('DELETE * from testTable')
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
+
+    @patch(MSSQLBase.__module__ + '.pyodbc')
+    def test_process_signals(self, mock_odbc):
+        mock_cnxn = mock_odbc.connect.return_value = MagicMock()
+        mock_cursor = mock_cnxn.cursor.side_effect = Exception()
+        blk = MSSQLDelete()
+        self.configure_block(blk, self.config)
+
+        blk.start()
+        self.assertEqual(mock_odbc.connect.call_count, 1)
+        with self.assertRaises(Exception):
+            blk.process_signals([Signal({'a': 1})])
+        mock_cnxn.close.assert_called_once_with()
+        self.assertEqual(mock_odbc.connect.call_count, 2)
+        self.assertEqual(mock_cnxn.cursor.call_count, 2)
+        blk.stop()
