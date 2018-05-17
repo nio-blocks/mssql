@@ -14,10 +14,12 @@ class TestMSSQLInsert(NIOBlockTestCase):
     _uid = 'user'
     _pw = 'pw'
     _driver = '{ODBC Driver 17 for SQL Server}'
+    _mars = False
     config = {
         'server': _host,
         'port': _port,
         'database': _db,
+        'mars': _mars,
         'credentials': {'userid': _uid, 'password': _pw},
         'table': 'the_table',
         'enrich': {'exclude_existing': False}
@@ -49,12 +51,14 @@ class TestMSSQLInsert(NIOBlockTestCase):
             'SERVER={};'
             'DATABASE={};'
             'UID={};'
+            'MARS_Connection={};'
             'PWD={}'.format(
                 self._driver,
                 self._port,
                 self._host,
                 self._db,
                 self._uid,
+                'no',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
         self.assertEqual(mock_cursor.execute.call_count, 2)
