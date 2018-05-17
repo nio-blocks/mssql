@@ -1,7 +1,7 @@
 import pyodbc
 from nio.block.base import Block
 from nio.properties import (VersionProperty, StringProperty, PropertyHolder,
-                            ObjectProperty, IntProperty)
+                            ObjectProperty, IntProperty, BoolProperty)
 from nio.signal.base import Signal
 from nio.util.discovery import not_discoverable
 
@@ -20,6 +20,7 @@ class MSSQLBase(Block):
     port = IntProperty(title='Port')
     database = StringProperty(title='Database')
     credentials = ObjectProperty(Credentials, title='Connection Credentials')
+    mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False)
 
     def __init__(self):
         super().__init__()
@@ -38,12 +39,14 @@ class MSSQLBase(Block):
             'SERVER={};'
             'DATABASE={};'
             'UID={};'
+            'MARS_Connection={};'
             'PWD={}').format(
                 '{ODBC Driver 17 for SQL Server}',
                 self.port(),
                 self.server(),
                 self.database(),
                 self.credentials().userid(),
+                'yes' if self.mars() else 'no',
                 self.credentials().password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
