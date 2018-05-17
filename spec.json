@@ -94,7 +94,7 @@
       "id": {
         "title": "Id",
         "type": "StringType",
-        "description": "",
+        "description": "block id",
         "default": null
       },
       "mars": {

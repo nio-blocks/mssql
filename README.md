@@ -40,7 +40,7 @@ Properties
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of database to connect to
 - **enrich**: enable signal enrichment
-- **id**: 
+- **id**: block id
 - **mars**: Enable MARS for SQL database connections
 - **port**: server port number
 - **row**: record to be inserted as `{key: value}` pairs
