@@ -25,6 +25,18 @@
         "description": "name of databse to connect to",
         "default": null
       },
+      "id": {
+        "title": "Id",
+        "type": "StringType",
+        "description": "block id",
+        "default": null
+      },
+      "mars": {
+        "title": "Enable Multiple Active Result Sets",
+        "type": "BoolType",
+        "description": "Enable MARS for SQL database connections",
+        "default": false
+      },
       "port": {
         "title": "Port",
         "type": "IntType",
@@ -69,6 +81,27 @@
         "type": "StringType",
         "description": "name of database to connect to",
         "default": null
+      },
+      "enrich": {
+        "title": "Signal Enrichment",
+        "type": "ObjectType",
+        "description": "enable signal enrichment",
+        "default": {
+          "enrich_field": "",
+          "exclude_existing": true
+        }
+      },
+      "id": {
+        "title": "Id",
+        "type": "StringType",
+        "description": "block id",
+        "default": null
+      },
+      "mars": {
+        "title": "Enable Multiple Active Result Sets",
+        "type": "BoolType",
+        "description": "Enable MARS for SQL database connections",
+        "default": false
       },
       "port": {
         "title": "Port",
@@ -127,6 +160,27 @@
         "description": "name of database to connect to",
         "default": null
       },
+      "enrich": {
+        "title": "Signal Enrichment",
+        "type": "ObjectType",
+        "description": "enable signal enrichment",
+        "default": {
+          "enrich_field": "",
+          "exclude_existing": true
+        }
+      },
+      "id": {
+        "title": "Id",
+        "type": "StringType",
+        "description": "block id",
+        "default": null
+      },
+      "mars": {
+        "title": "Enable Multiple Active Result Sets",
+        "type": "BoolType",
+        "description": "Enable MARS for SQL database connections",
+        "default": false
+      },
       "port": {
         "title": "Port",
         "type": "IntType",
@@ -157,6 +211,69 @@
       },
       "Results": {
         "description": "One signal per list of signals processed, with the attribute inserted containing the number of records inserted "
+      }
+    },
+    "commands": {}
+  },
+  "nio/MSSQLUpdate": {
+    "version": "0.1.0",
+    "description": "Creates a cursor object for every list of signals, and executes one update per signal",
+    "categories": [],
+    "properties": {
+      "credentials": {
+        "title": "Connection Credentials",
+        "type": "ObjectType",
+        "description": "UID and PWD used for database authentication",
+        "default": {
+          "userid": null,
+          "password": null
+        }
+      },
+      "database": {
+        "title": "Database",
+        "type": "StringType",
+        "description": "name of database to connect to",
+        "default": null
+      },
+      "id": {
+        "title": "Id",
+        "type": "StringType",
+        "description": "block id",
+        "default": null
+      },
+      "mars": {
+        "title": "Enable Multiple Active Result Sets",
+        "type": "BoolType",
+        "description": "Enable MARS for SQL database connections",
+        "default": false
+      },
+      "port": {
+        "title": "Port",
+        "type": "IntType",
+        "description": "server port number",
+        "default": null
+      },
+      "server": {
+        "title": "Server",
+        "type": "StringType",
+        "description": "server hostname or address",
+        "default": null
+      },
+      "update": {
+        "title": "Update command",
+        "type": "Type",
+        "description": "update command to be executed against the SQL database",
+        "default": "UPDATE SET {{ $data }}"
+      }
+    },
+    "inputs": {
+      "default": {
+        "description": "any list of signals"
+      }
+    },
+    "outputs": {
+      "default": {
+        "description": "the number of rows updated"
       }
     },
     "commands": {}
