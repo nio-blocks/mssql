@@ -20,7 +20,7 @@ class MSSQLBase(Block):
     port = IntProperty(title='Port')
     database = StringProperty(title='Database')
     credentials = ObjectProperty(Credentials, title='Connection Credentials')
-    mars = BoolProperty(title='Enable Multiple Active Result Sets')
+    mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False)
 
     def __init__(self):
         super().__init__()
