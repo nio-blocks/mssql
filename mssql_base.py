@@ -5,12 +5,22 @@ from nio.properties import (VersionProperty, StringProperty, PropertyHolder,
 from nio.signal.base import Signal
 from nio.util.discovery import not_discoverable
 
+driver_name = ''
+
+try:
+  driver_names = [x for x in pyodbc.drivers() if x.endswith(' for SQL Server')]
+  if driver_names:
+      driver_name = driver_names[0]
+  if not driver_name:
+      raise ReferenceError('No suitable ODBC driver found. Block will not be able to connect to MSSQL DB. View README.md to install driver.')
+except ReferenceError as error:
+  print(error)
+
 
 class Credentials(PropertyHolder):
 
     userid = StringProperty(title='User ID', allow_none=True)
     password = StringProperty(title="Password", allow_none=True)
-
 
 @not_discoverable
 class MSSQLBase(Block):
@@ -41,7 +51,7 @@ class MSSQLBase(Block):
             'UID={};'
             'MARS_Connection={};'
             'PWD={}').format(
-                '{ODBC Driver 17 for SQL Server}',
+                driver_name,
                 self.port(),
                 self.server(),
                 self.database(),

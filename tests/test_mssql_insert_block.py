@@ -1,3 +1,4 @@
+import pyodbc
 from unittest.mock import MagicMock, patch
 from nio.block.terminals import DEFAULT_TERMINAL
 from nio.signal.base import Signal
@@ -8,12 +9,16 @@ from ..mssql_insert_block import MSSQLInsert
 
 class TestMSSQLInsert(NIOBlockTestCase):
 
+    _driver = ''
+    driver_names = [x for x in pyodbc.drivers() if x.endswith(' for SQL Server')]
+    if driver_names:
+        _driver = driver_names[0]
+
     _host = 'host'
     _port = 314
     _db = 'db'
     _uid = 'user'
     _pw = 'pw'
-    _driver = '{ODBC Driver 17 for SQL Server}'
     _mars = False
     config = {
         'server': _host,
