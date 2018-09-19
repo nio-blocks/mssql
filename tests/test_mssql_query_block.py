@@ -21,7 +21,11 @@ class TestMSSQL(NIOBlockTestCase):
         'database': _db,
         'mars': _mars,
         'credentials': {'userid': _uid, 'password': _pw},
-        'query': 'SELECT * from {{ $table }}',
+        'table': '{{ $table }}',
+        'conditions': [
+            {'field': 'foo', 'operation': '=', 'value': 'bar'},
+            {'field': 'pi', 'operation': '>', 'value': 3},
+        ],
         'enrich': {'exclude_existing': False}
     }
 
@@ -66,7 +70,8 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with('SELECT * from foo')
+        mock_cursor.execute.assert_called_once_with(
+            'SELECT * from foo WHERE ? = ? AND ? > ?', ['foo', 'bar', 'pi', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -102,7 +107,8 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with('SELECT * from foo')
+        mock_cursor.execute.assert_called_once_with(
+            'SELECT * from foo WHERE ? = ? AND ? > ?', ['foo', 'bar', 'pi', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
