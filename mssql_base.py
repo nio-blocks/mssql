@@ -25,6 +25,7 @@ class MSSQLBase(Block):
     def __init__(self):
         super().__init__()
         self.cnxn = None
+        self.cursor = None
         self.isConnecting = False
 
     def configure(self, context):

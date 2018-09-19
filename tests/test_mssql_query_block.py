@@ -39,6 +39,9 @@ class TestMSSQL(NIOBlockTestCase):
             (2.0, 2.1, 2.2),
             (3.0, 3.1, 3.2)]
         mock_cursor.description = (('a',), ('b',), ('c',))
+        mock_cursor.columns.return_value = [
+            MagicMock(column_name='foo'),
+            MagicMock(column_name='pi')]
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)
         blk.start()
@@ -71,7 +74,7 @@ class TestMSSQL(NIOBlockTestCase):
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
         mock_cursor.execute.assert_called_once_with(
-            'SELECT * from foo WHERE ? = ? AND ? > ?', ['foo', 'bar', 'pi', 3])
+            'SELECT * FROM foo WHERE foo = ? AND pi > ?', ['bar', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -81,7 +84,9 @@ class TestMSSQL(NIOBlockTestCase):
         mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
         mock_cursor.execute.return_value = mock_cursor
         mock_cursor.fetchall.return_value = []
-
+        mock_cursor.columns.return_value = [
+            MagicMock(column_name='foo'),
+            MagicMock(column_name='pi')]
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)
         blk.start()
@@ -108,7 +113,7 @@ class TestMSSQL(NIOBlockTestCase):
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
         mock_cursor.execute.assert_called_once_with(
-            'SELECT * from foo WHERE foo = ? AND pi > ?', ['bar', 3])
+            'SELECT * FROM foo WHERE foo = ? AND pi > ?', ['bar', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
