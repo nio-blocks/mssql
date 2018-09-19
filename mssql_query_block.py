@@ -34,7 +34,7 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
                               title='Conditions',
                               deafult=[],
                               order=11)
-    _query = 'SELECT * from {}'
+    _query = 'SELECT * FROM {}'
 
     def process_signals(self, signals):
         if self.isConnecting:
@@ -50,7 +50,8 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
                 cursor = self.cnxn.cursor()
             for signal in signals:
                 query, params = self._build_query(signal)
-                self.logger.debug('Executing: {}'.format(query))
+                self.logger.debug('Executing: {} with params {}'.format(
+                    query, params))
                 rows = cursor.execute(query, params).fetchall()
                 self.logger.debug('Rows returned: {}'.format(len(rows)))
                 for row in rows:
@@ -75,9 +76,8 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
                 query += ' WHERE '
             else:
                 query += ' AND '
-            condition_string = '? {} ?'.format(
-                condition.operation(signal).value)
+            condition_string = '{} {} ?'.format(
+                condition.field(signal), condition.operation(signal).value)
             query += condition_string
-            params.append(condition.field(signal))
             params.append(condition.value(signal))
         return query, params

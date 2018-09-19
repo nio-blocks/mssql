@@ -108,7 +108,7 @@ class TestMSSQL(NIOBlockTestCase):
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
         mock_cursor.execute.assert_called_once_with(
-            'SELECT * from foo WHERE ? = ? AND ? > ?', ['foo', 'bar', 'pi', 3])
+            'SELECT * from foo WHERE foo = ? AND pi > ?', ['bar', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
