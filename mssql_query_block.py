@@ -15,8 +15,6 @@ class Operator(Enum):
     LT = '<'
     LTE = '<='
     NOT = '!='
-    NGT = '!>'
-    NLT = '!<'
 
 class Conditions(PropertyHolder):
 
