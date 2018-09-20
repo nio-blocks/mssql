@@ -17,7 +17,7 @@ class MSSQLBase(Block):
 
     version = VersionProperty('0.1.0')
     server = StringProperty(title='Server')
-    port = IntProperty(title='Port')
+    port = IntProperty(title='Port', default=1433)
     database = StringProperty(title='Database')
     credentials = ObjectProperty(Credentials, title='Connection Credentials')
     mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False)
