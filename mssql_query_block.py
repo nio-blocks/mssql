@@ -86,7 +86,7 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
         return query, params
 
     def _validate_column(self, target_column, target_table):
-        """ Raises ValueError if column is not valid in the target table"""
+        """ Raises ValueError if target_column is not valid in target_table"""
         valid_columns = []
         for column in self.cursor.columns(target_table):
             valid_columns.append(column.column_name)
