@@ -20,7 +20,7 @@ class Operator(Enum):
 
 class Conditions(PropertyHolder):
 
-    field = StringProperty(title='Field', order=20)
+    column = StringProperty(title='Column', order=20)
     operation = SelectProperty(Operator, title='Operator', order=21)
     value = Property(title='Value', order=22)
 
@@ -55,7 +55,8 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
                 rows = self.cursor.execute(query, params).fetchall()
                 self.logger.debug('Rows returned: {}'.format(len(rows)))
                 for row in rows:
-                    hashed_row = zip([r[0] for r in self.cursor.description], row)
+                    hashed_row = zip([r[0] for r in self.cursor.description],
+                                     row)
                     signal_dict = {a: b for a, b in hashed_row}
                     output_signals.append(
                         self.get_output_signal(signal_dict, signal))
@@ -78,18 +79,20 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
             else:
                 query += ' AND '
             condition_string = '{} {} ?'.format(
-                self._validate_field(condition.field(signal), table),
+                self._validate_column(condition.column(signal), table),
                 condition.operation(signal).value)
             query += condition_string
             params.append(condition.value(signal))
         return query, params
 
-    def _validate_field(self, field, table):
-        """ Raises ValueError if field is not valid in the target table"""
-        valid_fields = []
-        for column in self.cursor.columns(table):
-            valid_fields.append(column.column_name)
-        if field not in valid_fields:
+    def _validate_column(self, target_column, target_table):
+        """ Raises ValueError if column is not valid in the target table"""
+        valid_columns = []
+        for column in self.cursor.columns(target_table):
+            valid_columns.append(column.column_name)
+        if target_column not in valid_columns:
+            self.cursor.close()
             raise ValueError(
-                '{} is not a valid column in {} table.'.format(field, table))
-        return field
+                '\"{}\" is not a valid column in table \"{}\".'.format(
+                    target_column, target_table))
+        return target_column
