@@ -142,5 +142,6 @@ class TestMSSQL(NIOBlockTestCase):
         blk.start()
         with self.assertRaises(ValueError):
             blk.process_signals([Signal({'table': 'a_table'})])
+        self.assertEqual(mock_cnxn.close.call_count, 0)
         self.assertEqual(mock_cursor.close.call_count, 1)
         blk.stop()
