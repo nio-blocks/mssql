@@ -4,13 +4,14 @@ Creates a cursor object for an incoming signal and executes one command per sign
 
 Properties
 ----------
-- **command**: 
+- **conditions**: search condition
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of databse to connect to
 - **id**: block id
 - **mars**: Enable MARS for SQL database connections
 - **port**: server port number
 - **server**: server hostname or address
+- **table**: database table to be affected
 
 Inputs
 ------
@@ -72,14 +73,15 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
+- **conditions**: search condition
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of database to connect to
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **mars**: Enable MARS for SQL database connections
 - **port**: server port number
-- **query**: SQL query to execute
 - **server**: server hostname or address
+- **table**: database table to be affected
 
 Inputs
 ------
@@ -107,13 +109,15 @@ Creates a cursor object for every list of signals, and executes one update per s
 
 Properties
 ----------
+- **column_values**: specify columns and values to assign
+- **conditions**: search condition
 - **credentials**: UID and PWD used for database authentication
 - **database**: name of database to connect to
 - **id**: block id
 - **mars**: Enable MARS for SQL database connections
 - **port**: server port number
 - **server**: server hostname or address
-- **update**: update command to be executed against the SQL database
+- **table**: database table to be affected
 
 Inputs
 ------
