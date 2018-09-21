@@ -21,7 +21,9 @@ class TestMSSQL(NIOBlockTestCase):
         'database': _db,
         'mars': _mars,
         'credentials': {'userid': _uid, 'password': _pw},
-        'command': 'DELETE * from {{ $table }}'}
+        'table': '{{ $table }}',
+        'conditions': []
+    }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
     def test_process_signals(self, mock_odbc):
@@ -55,7 +57,8 @@ class TestMSSQL(NIOBlockTestCase):
                 'no',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with('DELETE * from testTable')
+        mock_cursor.execute.assert_called_once_with(
+            'DELETE FROM testTable', [])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 

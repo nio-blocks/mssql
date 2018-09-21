@@ -21,7 +21,8 @@ class TestMSSQLUpdate(NIOBlockTestCase):
         'database': _db,
         'mars': _mars,
         'credentials': {'userid': _uid, 'password': _pw},
-        'command': 'UPDATE SET {{ $data }}'
+        'column_values': [],
+        'conditions': []
     }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
@@ -32,10 +33,8 @@ class TestMSSQLUpdate(NIOBlockTestCase):
         blk = MSSQLUpdate()
         self.configure_block(blk, self.config)
 
-        signal_0 = {'data': 'testData'}
-
         blk.start()
-        blk.process_signals([Signal(signal_0)])
+        blk.process_signals([Signal({'table': 'a_table'})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
