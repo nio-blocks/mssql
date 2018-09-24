@@ -1,4 +1,3 @@
-from .mssql_column import validate_column
 from nio.properties import VersionProperty, StringProperty, PropertyHolder, \
     Property, ListProperty
 from nio.signal.base import Signal
@@ -65,8 +64,9 @@ class MSSQLUpdate(MSSQLBase, MSSQLConditions):
         for i, column_value in enumerate(self.column_values()):
             if i != 0:
                 column_values += ', '
-            condition_string = '{} = ?'.format(
-                validate_column(column_value.column(signal), table, cursor))
+            column = self.validate_column(column_value.column(signal),
+                                          table, cursor)
+            condition_string = '{} = ?'.format(column)
             params.append(column_value.value(signal))
             column_values += condition_string
 

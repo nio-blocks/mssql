@@ -22,13 +22,15 @@ class MSSQLBase(Block):
                                  order=4)
     table = StringProperty(title='Table', default='{{ $table }}', order=5)
     mars = BoolProperty(title='Enable Multiple Active Result Sets',
-                        default=False, order=6)
+                        default=False, order=6, advanced=True)
 
     def __init__(self):
         super().__init__()
         self.cnxn = None
         self.cursor = None
         self.isConnecting = False
+        # maintains a LUT index by table containing a list of columns for it
+        self._table_colums = {}
 
     def configure(self, context):
         super().configure(context)
@@ -58,8 +60,32 @@ class MSSQLBase(Block):
     def disconnect(self):
         if self.cnxn:
             self.cnxn.close()
+            self.cnxn = None
 
     def stop(self):
         super().stop()
-        if self.cnxn:
-            self.cnxn.close()
+        self.disconnect()
+
+    def validate_column(self, column, table, cursor):
+        """ Makes sure column belongs to table
+
+        Args:
+            column (str): column in question
+            table (str): table name
+            cursor (pyodbc.Cursor): active cursor
+
+        Returns:
+            True/False
+        """
+        columns = self._table_colums.get(table)
+        if columns is None:
+            columns = [column.column_name for column in cursor.columns(table)]
+            self._table_colums[table] = columns
+
+        if column not in columns:
+            cursor.close()
+            raise ValueError(
+                '\"{}\" is not a valid column in table \"{}\".'.format(
+                    column, table))
+
+        return column
