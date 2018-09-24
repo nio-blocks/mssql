@@ -41,9 +41,12 @@ class TestMSSQLInsert(NIOBlockTestCase):
             Signal(signal_0),  # a contains double quote
             Signal(signal_1)])  # contains single quote
         blk.stop()
-        self.assert_num_signals_notified(1)
+        self.assert_num_signals_notified(2)
         self.assertDictEqual(
             self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
+            {'a': 'a\"1', 'b': 2, 'c': 3, 'inserted': 1})
+        self.assertDictEqual(
+            self.last_notified[DEFAULT_TERMINAL][1].to_dict(),
             {'a': "a'2", 'c': 3, 'inserted': 2})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
