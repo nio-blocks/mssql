@@ -5,7 +5,7 @@ from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
 class MSSQLInsert(EnrichSignals, MSSQLBase):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.2.0")
     row = Property(title='Row', default='{{ $.to_dict() }}')
 
     def process_signals(self, signals):
