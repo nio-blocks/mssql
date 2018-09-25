@@ -1,6 +1,6 @@
 {
   "nio/MSSQLDelete": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Creates a cursor object for an incoming signal and executes one command per signal.",
     "categories": [
       "Database"

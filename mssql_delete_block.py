@@ -6,7 +6,7 @@ from .mssql_conditions import MSSQLConditions
 
 class MSSQLDelete(MSSQLBase, MSSQLConditions):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.2.0")
 
     def process_signals(self, signals):
         if self.isConnecting:
