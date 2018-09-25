@@ -13,7 +13,7 @@ class ColumnValue(PropertyHolder):
 
 class MSSQLUpdate(MSSQLBase, MSSQLConditions):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.2.0")
     column_values = ListProperty(ColumnValue,
                                  title='Column Values',
                                  deafult=[],

@@ -17,6 +17,6 @@
   "nio/MSSQLUpdate": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/mssql.git",
-    "version": "0.1.0"
+    "version": "0.2.0"
   }
 }
