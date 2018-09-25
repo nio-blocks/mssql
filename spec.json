@@ -2,7 +2,9 @@
   "nio/MSSQLDelete": {
     "version": "0.1.0",
     "description": "Creates a cursor object for an incoming signal and executes one command per signal.",
-    "categories": [],
+    "categories": [
+      "Database"
+    ],
     "properties": {
       "command": {
         "title": "Command",
@@ -22,7 +24,7 @@
       "database": {
         "title": "Database",
         "type": "StringType",
-        "description": "name of databse to connect to",
+        "description": "name of database to connect to",
         "default": null
       },
       "id": {
@@ -65,7 +67,9 @@
   "nio/MSSQLInsert": {
     "version": "0.1.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.",
-    "categories": [],
+    "categories": [
+      "Database"
+    ],
     "properties": {
       "credentials": {
         "title": "Connection Credentials",
@@ -143,7 +147,9 @@
   "nio/MSSQLQuery": {
     "version": "0.1.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal returning all matching records in a new list of signals.",
-    "categories": [],
+    "categories": [
+      "Database"
+    ],
     "properties": {
       "credentials": {
         "title": "Connection Credentials",
@@ -218,7 +224,9 @@
   "nio/MSSQLUpdate": {
     "version": "0.1.0",
     "description": "Creates a cursor object for every list of signals, and executes one update per signal",
-    "categories": [],
+    "categories": [
+      "Database"
+    ],
     "properties": {
       "credentials": {
         "title": "Connection Credentials",
