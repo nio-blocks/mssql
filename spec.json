@@ -145,7 +145,7 @@
     "commands": {}
   },
   "nio/MSSQLQuery": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal returning all matching records in a new list of signals.",
     "categories": [
       "Database"

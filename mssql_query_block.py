@@ -9,7 +9,7 @@ from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 @output('no_results', label='No Results')
 class MSSQLQuery(EnrichSignals, MSSQLBase, MSSQLConditions):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.2.0")
 
     def process_signals(self, signals):
         if self.isConnecting:
