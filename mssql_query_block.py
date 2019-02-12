@@ -1,10 +1,7 @@
-from nio.properties import Property, VersionProperty, ListProperty, StringProperty, PropertyHolder
+from nio.properties import Property, VersionProperty, StringProperty
 from nio.block.terminals import output
 from .mssql_base import MSSQLBase
 from nio.block.mixins.enrich.enrich_signals import EnrichSignals
-
-class Parameter(PropertyHolder):
-    param = Property(title='Parameter')
 
 @output('results', label='Results')
 @output('no_results', label='No Results')
@@ -12,7 +9,7 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
 
     version = VersionProperty("1.0.0")
     query = StringProperty(title='Parameterized Query (use ? for any user-supplied values)', default='SELECT * FROM table where id=?', order=10)
-    parameters = ListProperty(Parameter, title='Substitution Parameter (In Order)', default=[], order=11)
+    parameters = Property(title='Substitution Parameters (As List, In Order)', default='{{[]}}', order=11)
 
     def process_signals(self, signals):
         if self.isConnecting:
@@ -29,7 +26,7 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
 
             for signal in signals:
                 _query = self.query(signal)
-                _parameters = [p.param(signal) for p in self.parameters()]
+                _parameters = self.parameters(signal)
 
                 result = cursor.execute(_query, _parameters) if len(_parameters) > 0 else cursor.execute(_query)
 
