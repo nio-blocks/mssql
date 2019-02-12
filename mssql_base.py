@@ -1,28 +1,22 @@
 import pyodbc
 from nio.block.base import Block
-from nio.properties import (VersionProperty, StringProperty, PropertyHolder,
-                            ObjectProperty, IntProperty, BoolProperty)
+from nio.properties import (VersionProperty, StringProperty, PropertyHolder, ObjectProperty, IntProperty, BoolProperty)
 from nio.util.discovery import not_discoverable
 
+class Connection(PropertyHolder):
 
-class Credentials(PropertyHolder):
-
-    userid = StringProperty(title='User ID', allow_none=True, order=1)
-    password = StringProperty(title="Password", allow_none=True, order=2)
-
+    server = StringProperty(title='Server', default='[[MSSQL_SERVER]]', order=1)
+    port = IntProperty(title='Port', default='[[MSSQL_PORT]]', order=2)
+    database = StringProperty(title='Database', default='[[MSSQL_DB]]', order=3)
+    userid = StringProperty(title='User ID', allow_none=True, default='[[MSSQL_USER]]', order=4)
+    password = StringProperty(title="Password", allow_none=True, default='[[MSSQL_PWD]]', order=5)
+    mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False, order=6)
 
 @not_discoverable
 class MSSQLBase(Block):
 
-    version = VersionProperty('0.1.0')
-    server = StringProperty(title='Server', order=1)
-    port = IntProperty(title='Port', default=1433, order=2)
-    database = StringProperty(title='Database', order=3)
-    credentials = ObjectProperty(Credentials, title='Connection Credentials',
-                                 order=4)
-    table = StringProperty(title='Table', default='{{ $table }}', order=5)
-    mars = BoolProperty(title='Enable Multiple Active Result Sets',
-                        default=False, order=6, advanced=True)
+    version = VersionProperty('1.0.0')
+    connection = ObjectProperty(Connection, title='Database Connection', order=1, advanced=True)
 
     def __init__(self):
         super().__init__()
@@ -47,12 +41,12 @@ class MSSQLBase(Block):
             'MARS_Connection={};'
             'PWD={}').format(
                 '{ODBC Driver 17 for SQL Server}',
-                self.port(),
-                self.server(),
-                self.database(),
-                self.credentials().userid(),
-                'yes' if self.mars() else 'no',
-                self.credentials().password())
+                self.connection().port(),
+                self.connection().server(),
+                self.connection().database(),
+                self.connection().userid(),
+                'yes' if self.connection().mars() else 'no',
+                self.connection().password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
         self.isConnecting = False

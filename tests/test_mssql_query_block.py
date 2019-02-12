@@ -4,7 +4,6 @@ from nio.signal.base import Signal
 from ..mssql_base import MSSQLBase
 from ..mssql_query_block import MSSQLQuery
 
-
 class TestMSSQL(NIOBlockTestCase):
 
     _host = 'host'
@@ -15,17 +14,20 @@ class TestMSSQL(NIOBlockTestCase):
     _driver = '{ODBC Driver 17 for SQL Server}'
     _mars = True
     config = {
-        'server': _host,
-        'port': _port,
-        'database': _db,
-        'mars': _mars,
-        'credentials': {'userid': _uid, 'password': _pw},
-        'table': '{{ $table }}',
-        'conditions': [
-            {'column': 'foo', 'operation': '=', 'value': 'bar'},
-            {'column': 'pi', 'operation': '>', 'value': 3},
-        ],
-        'enrich': {'exclude_existing': False}
+        'connection': {
+          'server': _host,
+          'port': _port,
+          'database': _db,
+          'userid': _uid,
+          'password': _pw,
+          'mars': _mars,
+        },
+        'enrich': {
+          'exclude_existing': False
+        },
+        'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?',
+        'parameters': [{ 'param': 'a_table'}, { 'param': 'bar' }, { 'param': 3 }],
+        'headers': { 'foo': 'bar' }
     }
 
     @patch(MSSQLBase.__module__ + '.pyodbc')
@@ -38,24 +40,26 @@ class TestMSSQL(NIOBlockTestCase):
             (2.0, 2.1, 2.2),
             (3.0, 3.1, 3.2)]
         mock_cursor.description = (('a',), ('b',), ('c',))
-        mock_cursor.columns.return_value = [
-            MagicMock(column_name='foo'),
-            MagicMock(column_name='pi')]
+        mock_cursor.columns.return_value = [MagicMock(column_name='foo'), MagicMock(column_name='pi')]
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'table': 'a_table'})])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'query': self.config['query'], 'parameters': self.config['parameters']})])
         blk.stop()
         self.assert_num_signals_notified(3)
+        print(self.last_notified['results'][0].to_dict())
         self.assertDictEqual(
-            self.last_notified['results'][0].to_dict(),
-            {'a': 1.0, 'b': 1.1, 'c': 1.2, 'table': 'a_table'})
+          self.last_notified['results'][0].to_dict(),
+          {'a': 1.0, 'b': 1.1, 'c': 1.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': [{ 'param': 'a_table'}, { 'param': 'bar' }, { 'param': 3 }]}
+        )
         self.assertDictEqual(
-            self.last_notified['results'][1].to_dict(),
-            {'a': 2.0, 'b': 2.1, 'c': 2.2, 'table': 'a_table'})
+          self.last_notified['results'][1].to_dict(),
+          {'a': 2.0, 'b': 2.1, 'c': 2.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': [{ 'param': 'a_table'}, { 'param': 'bar' }, { 'param': 3 }]}
+        )
         self.assertDictEqual(
-            self.last_notified['results'][2].to_dict(),
-            {'a': 3.0, 'b': 3.1, 'c': 3.2, 'table': 'a_table'})
+          self.last_notified['results'][2].to_dict(),
+          {'a': 3.0, 'b': 3.1, 'c': 3.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': [{ 'param': 'a_table'}, { 'param': 'bar' }, { 'param': 3 }]}
+        )
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
@@ -72,8 +76,7 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with(
-            'SELECT * FROM a_table WHERE foo = ? AND pi > ?', ['bar', 3])
+        mock_cursor.execute.assert_called_once_with('SELECT * FROM ? WHERE foo = ? AND pi > ?', ('a_table', 'bar', 3))
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -89,12 +92,13 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'table': 'a_table'})])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'query': self.config['query'], 'parameters': self.config['parameters']})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
-            self.last_notified['no_results'][0].to_dict(),
-                    {'results': 'null', 'table': 'a_table'})
+          self.last_notified['no_results'][0].to_dict(),
+          {'results': 'null', 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': [{ 'param': 'a_table'}, { 'param': 'bar' }, { 'param': 3 }]}
+        )
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
@@ -111,8 +115,7 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with(
-            'SELECT * FROM a_table WHERE foo = ? AND pi > ?', ['bar', 3])
+        mock_cursor.execute.assert_called_once_with('SELECT * FROM ? WHERE foo = ? AND pi > ?', ('a_table', 'bar', 3))
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -125,22 +128,8 @@ class TestMSSQL(NIOBlockTestCase):
         blk.start()
         self.assertEqual(mock_odbc.connect.call_count, 1)
         with self.assertRaises(Exception):
-            blk.process_signals([Signal({'a': 1})])
+            blk.process_signals([Signal({'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]})])
         mock_cnxn.close.assert_called_once_with()
         self.assertEqual(mock_odbc.connect.call_count, 2)
         self.assertEqual(mock_cnxn.cursor.call_count, 2)
-        blk.stop()
-
-    @patch(MSSQLBase.__module__ + '.pyodbc')
-    def test_invalid_column(self, mock_odbc):
-        mock_cnxn = mock_odbc.connect.return_value = MagicMock()
-        mock_cursor = mock_cnxn.cursor.return_value = MagicMock()
-        mock_cursor.columns.return_value = [MagicMock(column_name='foo')]
-        blk = MSSQLQuery()
-        self.configure_block(blk, self.config)
-        blk.start()
-        with self.assertRaises(ValueError):
-            blk.process_signals([Signal({'table': 'a_table'})])
-        self.assertEqual(mock_cnxn.close.call_count, 0)
-        self.assertEqual(mock_cursor.close.call_count, 1)
         blk.stop()

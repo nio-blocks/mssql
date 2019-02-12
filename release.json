@@ -1,22 +1,7 @@
 {
-  "nio/MSSQLDelete": {
-    "language": "Python",
-    "url": "git://github.com/nio-blocks/mssql.git",
-    "version": "0.2.0"
-  },
-  "nio/MSSQLInsert": {
-    "language": "Python",
-    "url": "git://github.com/nio-blocks/mssql.git",
-    "version": "0.2.0"
-  },
   "nio/MSSQLQuery": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/mssql.git",
-    "version": "0.2.0"
-  },
-  "nio/MSSQLUpdate": {
-    "language": "Python",
-    "url": "git://github.com/nio-blocks/mssql.git",
-    "version": "0.2.0"
+    "version": "1.0.0"
   }
 }
