@@ -29,15 +29,21 @@ class MSSQLQuery(EnrichSignals, MSSQLBase):
 
             for signal in signals:
                 _query = self.query(signal)
-                _parameters = tuple(p.param(signal) for p in self.parameters())
+                _parameters = [p.param(signal) for p in self.parameters()]
 
-                rows = cursor.execute(_query, _parameters).fetchall()
+                result = cursor.execute(_query, _parameters) if len(_parameters) > 0 else cursor.execute(_query)
 
-                for row in rows:
-                    hashed_row = zip([r[0] for r in cursor.description], row)
-                    signal_dict = {a: b for a, b in hashed_row}
-                    output_signals.append(self.get_output_signal(signal_dict, signal))
+                try:
+                    rows = result.fetchall()
+                    for row in rows:
+                        hashed_row = zip([r[0] for r in cursor.description],row)
+                        signal_dict = {a: b for a, b in hashed_row}
+                        output_signals.append(self.get_output_signal(signal_dict, signal))
 
+                except Exception:
+                    output_signals.append(self.get_output_signal({'inserted': result.rowcount}, signal))
+
+            cursor.commit()
             cursor.close()
 
             if len(output_signals) > 0:
