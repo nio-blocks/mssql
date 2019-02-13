@@ -1,6 +1,6 @@
 import pyodbc
 from nio.block.base import Block
-from nio.properties import (VersionProperty, StringProperty, PropertyHolder, ObjectProperty, IntProperty, BoolProperty)
+from nio.properties import (StringProperty, IntProperty, BoolProperty, VersionProperty, ObjectProperty, PropertyHolder)
 from nio.util.discovery import not_discoverable
 
 class Connection(PropertyHolder):
@@ -23,6 +23,8 @@ class MSSQLBase(Block):
         self.cnxn = None
         self.cursor = None
         self.isConnecting = False
+        # maintains a LUT index by table containing a list of columns for it
+        self._table_colums = {}
 
     def configure(self, context):
         super().configure(context)
@@ -57,3 +59,27 @@ class MSSQLBase(Block):
     def stop(self):
         super().stop()
         self.disconnect()
+
+    def validate_column(self, column, table, cursor):
+        """ Makes sure column belongs to table
+
+        Args:
+            column (str): column in question
+            table (str): table name
+            cursor (pyodbc.Cursor): active cursor
+
+        Returns:
+            True/False
+        """
+        columns = self._table_colums.get(table)
+        if columns is None:
+            columns = [column.column_name for column in cursor.columns(table)]
+            self._table_colums[table] = columns
+
+        if column not in columns:
+            cursor.close()
+            raise ValueError(
+                '\"{}\" is not a valid column in table \"{}\".'.format(
+                    column, table))
+
+        return column

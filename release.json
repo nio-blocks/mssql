@@ -1,5 +1,25 @@
 {
+  "nio/MSSQLRawQuery": {
+    "language": "Python",
+    "url": "git://github.com/nio-blocks/mssql.git",
+    "version": "1.0.0"
+  },
+  "nio/MSSQLDelete": {
+    "language": "Python",
+    "url": "git://github.com/nio-blocks/mssql.git",
+    "version": "1.0.0"
+  },
+  "nio/MSSQLInsert": {
+    "language": "Python",
+    "url": "git://github.com/nio-blocks/mssql.git",
+    "version": "1.0.0"
+  },
   "nio/MSSQLQuery": {
+    "language": "Python",
+    "url": "git://github.com/nio-blocks/mssql.git",
+    "version": "1.0.0"
+  },
+  "nio/MSSQLUpdate": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/mssql.git",
     "version": "1.0.0"
