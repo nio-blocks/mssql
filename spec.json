@@ -11,7 +11,7 @@
         "type": "ObjectType",
         "description": "Connection Details",
         "default": {
-          "userid": "[[MSSQL_USER]]",
+          "user_id": "[[MSSQL_USER]]",
           "password": "[[MSSQL_PWD]]",
           "server": "[[MSSQL_SERVER]]",
           "port": "[[MSSQL_PORT]]",
@@ -71,7 +71,7 @@
         "type": "ObjectType",
         "description": "Connection Details",
         "default": {
-          "userid": "[[MSSQL_USER]]",
+          "user_id": "[[MSSQL_USER]]",
           "password": "[[MSSQL_PWD]]",
           "server": "[[MSSQL_SERVER]]",
           "port": "[[MSSQL_PORT]]",
@@ -131,7 +131,7 @@
         "type": "ObjectType",
         "description": "Connection Details",
         "default": {
-          "userid": "[[MSSQL_USER]]",
+          "user_id": "[[MSSQL_USER]]",
           "password": "[[MSSQL_PWD]]",
           "server": "[[MSSQL_SERVER]]",
           "port": "[[MSSQL_PORT]]",
@@ -194,7 +194,7 @@
         "type": "ObjectType",
         "description": "Connection Details",
         "default": {
-          "userid": "[[MSSQL_USER]]",
+          "user_id": "[[MSSQL_USER]]",
           "password": "[[MSSQL_PWD]]",
           "server": "[[MSSQL_SERVER]]",
           "port": "[[MSSQL_PORT]]",
@@ -260,7 +260,7 @@
         "type": "ObjectType",
         "description": "Connection Details",
         "default": {
-          "userid": "[[MSSQL_USER]]",
+          "user_id": "[[MSSQL_USER]]",
           "password": "[[MSSQL_PWD]]",
           "server": "[[MSSQL_SERVER]]",
           "port": "[[MSSQL_PORT]]",

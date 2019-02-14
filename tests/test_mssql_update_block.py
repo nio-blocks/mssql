@@ -20,7 +20,7 @@ class TestMSSQLUpdate(NIOBlockTestCase):
           'server': _host,
           'port': _port,
           'database': _db,
-          'userid': _uid,
+          'user_id': _uid,
           'password': _pw,
           'mars': _mars,
         },

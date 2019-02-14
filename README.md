@@ -4,7 +4,7 @@ Creates a cursor object for an incoming signal and executes one command per sign
 
 Properties
 ----------
-- **connection**: userid, password, server, port, database, mars
+- **connection**: user_id, password, server, port, database, mars
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **table**: database table to be affected
@@ -35,7 +35,7 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: userid, password, server, port, database, mars
+- **connection**: user_id, password, server, port, database, mars
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **table**: database table to be affected
@@ -66,7 +66,7 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: userid, password, server, port, database, mars
+- **connection**: user_id, password, server, port, database, mars
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **table**: database table to be affected
@@ -98,7 +98,7 @@ Creates a cursor object for every list of signals, and executes one update per s
 
 Properties
 ----------
-- **connection**: userid, password, server, port, database, mars
+- **connection**: user_id, password, server, port, database, mars
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **table**: database table to be affected
@@ -125,7 +125,7 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: userid, password, server, port, database, mars
+- **connection**: user_id, password, server, port, database, mars
 - **enrich**: enable signal enrichment
 - **id**: block id
 - **query**: parameterized SQL query to execute
