@@ -26,8 +26,8 @@ class TestMSSQL(NIOBlockTestCase):
         'enrich': {
           'exclude_existing': False
         },
-        'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?',
-        'parameters': ['a_table', 'bar', 3],
+        'query': 'SELECT * FROM a_table WHERE foo = ? AND pi > ?',
+        'params': [{ 'parameter': 'bar'},{ 'parameter': 3}],
         'headers': { 'foo': 'bar' }
     }
 
@@ -45,21 +45,21 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLRawQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'headers': self.config['headers'], 'query': self.config['query'], 'parameters': self.config['parameters']})])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})], query=self.config['query'])
         blk.stop()
         self.assert_num_signals_notified(3)
         print(self.last_notified['results'][0].to_dict())
         self.assertDictEqual(
           self.last_notified['results'][0].to_dict(),
-          {'a': 1.0, 'b': 1.1, 'c': 1.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]}
+          {'a': 1.0, 'b': 1.1, 'c': 1.2, 'headers': { 'foo': 'bar' }, 'params': [{ 'parameter': 'bar'},{ 'parameter': 3}]}
         )
         self.assertDictEqual(
           self.last_notified['results'][1].to_dict(),
-          {'a': 2.0, 'b': 2.1, 'c': 2.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]}
+          {'a': 2.0, 'b': 2.1, 'c': 2.2, 'headers': { 'foo': 'bar' }, 'params': [{ 'parameter': 'bar'},{ 'parameter': 3}]}
         )
         self.assertDictEqual(
           self.last_notified['results'][2].to_dict(),
-          {'a': 3.0, 'b': 3.1, 'c': 3.2, 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]}
+          {'a': 3.0, 'b': 3.1, 'c': 3.2, 'headers': { 'foo': 'bar' }, 'params': [{ 'parameter': 'bar'},{ 'parameter': 3}]}
         )
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
@@ -77,7 +77,7 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with('SELECT * FROM ? WHERE foo = ? AND pi > ?', ['a_table', 'bar', 3])
+        mock_cursor.execute.assert_called_once_with('SELECT * FROM a_table WHERE foo = ? AND pi > ?', ['bar', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -93,12 +93,12 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLRawQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'headers': self.config['headers'], 'query': self.config['query'], 'parameters': self.config['parameters']})])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})], query=self.config['query'])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
           self.last_notified['no_results'][0].to_dict(),
-          {'results': 'null', 'headers': { 'foo': 'bar' }, 'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]}
+          {'headers': { 'foo': 'bar' }, 'params': [{ 'parameter': 'bar'},{ 'parameter': 3}], 'results': None}
         )
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
@@ -116,7 +116,7 @@ class TestMSSQL(NIOBlockTestCase):
                 'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with('SELECT * FROM ? WHERE foo = ? AND pi > ?', ['a_table', 'bar', 3])
+        mock_cursor.execute.assert_called_once_with('SELECT * FROM a_table WHERE foo = ? AND pi > ?', ['bar', 3])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 
@@ -129,7 +129,7 @@ class TestMSSQL(NIOBlockTestCase):
         blk.start()
         self.assertEqual(mock_odbc.connect.call_count, 1)
         with self.assertRaises(Exception):
-            blk.process_signals([Signal({'query': 'SELECT * FROM ? WHERE foo = ? AND pi > ?', 'parameters': ['a_table', 'bar', 3]})])
+            blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})])
         mock_cnxn.close.assert_called_once_with()
         self.assertEqual(mock_odbc.connect.call_count, 2)
         self.assertEqual(mock_cnxn.cursor.call_count, 2)
