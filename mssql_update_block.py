@@ -11,8 +11,8 @@ class ColumnValue(PropertyHolder):
 
 
 class MSSQLUpdate(MSSQLTabledBase, MSSQLConditions):
-    version = VersionProperty("1.0.0")
-    column_values = ListProperty(ColumnValue, title='Column Values', default=[], order=11)
+    version = VersionProperty("1.0.1")
+    column_values = ListProperty(ColumnValue, title='Column Values', default=[], order=2)
 
     def process_signals(self, signals, **kwargs):
         if self.is_connecting:
@@ -25,7 +25,7 @@ class MSSQLUpdate(MSSQLTabledBase, MSSQLConditions):
         total_rows = 0
         for signal in signals:
             # determine query to execute
-            table = self.table(signal)
+            table = self.table()
             column_values, params = \
                 self._get_column_values(signal, table, cursor)
             conditions, where_params = \

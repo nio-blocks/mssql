@@ -10,7 +10,7 @@ from .mssql_conditions import MSSQLConditions
 @output('no_results', label='No Results')
 class MSSQLQuery(EnrichSignals, MSSQLTabledBase, MSSQLConditions):
 
-    version = VersionProperty("1.0.0")
+    version = VersionProperty("1.0.1")
 
     def process_signals(self, signals, **kwargs):
         if self.is_connecting:
@@ -22,7 +22,7 @@ class MSSQLQuery(EnrichSignals, MSSQLTabledBase, MSSQLConditions):
         output_signals = []
         for signal in signals:
             # determine query to execute
-            table = self.table(signal)
+            table = self.table()
             conditions, params = \
                 self._get_where_conditions(signal, table, cursor)
             query = 'SELECT * FROM {}'.format(table) + conditions

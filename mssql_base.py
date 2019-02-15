@@ -10,12 +10,14 @@ class Connection(PropertyHolder):
     database = StringProperty(title='Database', default='[[MSSQL_DB]]', order=3)
     user_id = StringProperty(title='User ID', allow_none=True, default='[[MSSQL_USER]]', order=4)
     password = StringProperty(title='Password', allow_none=True, default='[[MSSQL_PWD]]', order=5)
-    mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False, order=6)
 
+class Mars(PropertyHolder):
+    enabled = BoolProperty(title='Enable MARS?', default=True, order=1)
 
 @not_discoverable
 class MSSQLBase(Block):
-    connection = ObjectProperty(Connection, title='Database Connection', order=1, advanced=True)
+    connection = ObjectProperty(Connection, title='Database Connection', order=50)
+    mars = ObjectProperty(Mars, title='Multiple Active Result Sets (MARS)', order=60)
 
     def __init__(self):
         super().__init__()
@@ -43,7 +45,7 @@ class MSSQLBase(Block):
                 cnxn_props.server(),
                 cnxn_props.database(),
                 cnxn_props.user_id(),
-                'yes' if cnxn_props.mars() else 'no',
+                'yes' if self.mars() else 'no',
                 cnxn_props.password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
@@ -69,7 +71,7 @@ class MSSQLBase(Block):
 
 @not_discoverable
 class MSSQLTabledBase(MSSQLBase):
-    table = StringProperty(title='Table', default='{{ $table }}', order=1)
+    table = StringProperty(title='Table', default='TableName', order=1)
 
     def __init__(self):
         super().__init__()

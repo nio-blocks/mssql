@@ -22,10 +22,12 @@ class TestMSSQLUpdate(NIOBlockTestCase):
           'database': _db,
           'user_id': _uid,
           'password': _pw,
-          'mars': _mars,
         },
         'enrich': {
           'exclude_existing': False
+        },
+        'mars': {
+          'enabled': _mars
         },
         'column_values': [],
         'conditions': []

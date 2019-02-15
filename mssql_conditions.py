@@ -23,8 +23,8 @@ class Conditions(PropertyHolder):
 
 
 class MSSQLConditions(object):
-    conditions = ListProperty(Conditions, title='Conditions', deafult=[], order=14)
-    combine_condition = SelectProperty(AndOrOperator, title='Combine Condition', default="AND", order=15)
+    conditions = ListProperty(Conditions, title='Conditions', default=[], order=15)
+    combine_condition = SelectProperty(AndOrOperator, title='Combine Condition', default="AND", order=14)
 
     def _get_where_conditions(self, signal, table, cursor):
         conditions = ""

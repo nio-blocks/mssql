@@ -4,8 +4,8 @@ from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 from .mssql_base import MSSQLTabledBase
 
 class MSSQLInsert(EnrichSignals, MSSQLTabledBase):
-    version = VersionProperty("1.0.0")
-    row = Property(title='Row', default='{{ $.to_dict() }}', order=6)
+    version = VersionProperty("1.0.1")
+    row = Property(title='Row', default='{{ $.to_dict() }}', order=2)
 
     def process_signals(self, signals, **kwargs):
         if self.is_connecting:
@@ -29,7 +29,7 @@ class MSSQLInsert(EnrichSignals, MSSQLTabledBase):
                     val = '\'' + val + '\''
                 vals += str(val) + ', '
             query = 'INSERT INTO {} ({}) VALUES ({});'.format(
-                self.table(signal),
+                self.table(),
                 cols[:-2],
                 vals[:-2])
             self.logger.debug('Executing: {}'.format(query))

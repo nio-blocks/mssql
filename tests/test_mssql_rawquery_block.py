@@ -21,10 +21,12 @@ class TestMSSQL(NIOBlockTestCase):
           'database': _db,
           'user_id': _uid,
           'password': _pw,
-          'mars': _mars,
         },
         'enrich': {
           'exclude_existing': False
+        },
+        'mars': {
+          'enabled': _mars
         },
         'query': 'SELECT * FROM a_table WHERE foo = ? AND pi > ?',
         'params': [{ 'parameter': 'bar'},{ 'parameter': 3}],
@@ -45,7 +47,7 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLRawQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})], query=self.config['query'])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})])
         blk.stop()
         self.assert_num_signals_notified(3)
         print(self.last_notified['results'][0].to_dict())
@@ -93,7 +95,7 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLRawQuery()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})], query=self.config['query'])
+        blk.process_signals([Signal({'headers': self.config['headers'], 'params': self.config['params']})])
         blk.stop()
         self.assert_num_signals_notified(1)
         self.assertDictEqual(
