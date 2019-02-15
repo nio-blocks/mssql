@@ -4,11 +4,10 @@ Creates a cursor object for an incoming signal and executes one command per sign
 
 Properties
 ----------
-- **connection**: user_id, password, server, port, database, mars
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **table**: database table to be affected
-- **conditions**: search condition
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: search condition
 
 Inputs
 ------
@@ -35,11 +34,10 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: user_id, password, server, port, database, mars
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **table**: database table to be affected
-- **row**: record to be inserted as `{key: value}` pairs
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Row**: record to be inserted as `{key: value}` pairs
 
 Inputs
 ------
@@ -66,11 +64,10 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: user_id, password, server, port, database, mars
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **table**: database table to be affected
-- **conditions**: conditions to be met for items to be retrieved
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: conditions to be met for items to be retrieved
 
 Inputs
 ------
@@ -98,12 +95,11 @@ Creates a cursor object for every list of signals, and executes one update per s
 
 Properties
 ----------
-- **connection**: user_id, password, server, port, database, mars
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **table**: database table to be affected
-- **conditions**: conditions to be met for records to be updated
-- **column_values**: list of values to be updated
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: conditions to be met for records to be updated
+- **Column Values**: list of values to be updated
 
 Inputs
 ------
@@ -125,11 +121,10 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **connection**: user_id, password, server, port, database, mars
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **query**: parameterized SQL query to execute
-- **parameters**: list of parameters that will be substituted into the query
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Parameterized Query**: parameterized SQL query to execute (use ? for any user-supplied values)
+- **Substitution Parameters**: parameters that will be substituted into the query ((As List, In Order))
 
 Inputs
 ------

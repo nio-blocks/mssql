@@ -9,7 +9,7 @@ class Connection(PropertyHolder):
     port = IntProperty(title='Port', default='[[MSSQL_PORT]]', order=2)
     database = StringProperty(title='Database', default='[[MSSQL_DB]]', order=3)
     user_id = StringProperty(title='User ID', allow_none=True, default='[[MSSQL_USER]]', order=4)
-    password = StringProperty(title="Password", allow_none=True, default='[[MSSQL_PWD]]', order=5)
+    password = StringProperty(title='Password', allow_none=True, default='[[MSSQL_PWD]]', order=5)
     mars = BoolProperty(title='Enable Multiple Active Result Sets', default=False, order=6)
 
 
