@@ -48,9 +48,9 @@ class MSSQLRawQuery(EnrichSignals, MSSQLBase):
                     output_signals.append(self.get_output_signal(signal_dict, signal))
 
             except Exception:
+                cursor.commit()
                 output_signals.append(self.get_output_signal({'affected_rows': result.rowcount}, signal))
 
-        cursor.commit()
         cursor.close()
 
         if len(output_signals) > 0:

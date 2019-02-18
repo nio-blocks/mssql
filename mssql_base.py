@@ -32,6 +32,8 @@ class MSSQLBase(Block):
         self.is_connecting = True
 
         cnxn_props = self.connection()
+        mars_enabled = self.mars().enabled()
+
         cnxn_string = (
             'DRIVER={};'
             'PORT={};'
@@ -45,7 +47,7 @@ class MSSQLBase(Block):
                 cnxn_props.server(),
                 cnxn_props.database(),
                 cnxn_props.user_id(),
-                'yes' if self.mars() else 'no',
+                'yes' if mars_enabled else 'no',
                 cnxn_props.password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
