@@ -1,7 +1,7 @@
 from nio.properties import VersionProperty, Property
 from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
-from .mssql_base import MSSQLTabledBase
+from .mssql_tabled_base import MSSQLTabledBase
 
 class MSSQLInsert(EnrichSignals, MSSQLTabledBase):
     version = VersionProperty("1.0.1")

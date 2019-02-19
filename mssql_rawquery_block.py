@@ -1,7 +1,8 @@
 from nio.properties import Property, VersionProperty, StringProperty, ListProperty, PropertyHolder
 from nio.block.terminals import output
-from .mssql_base import MSSQLBase
 from nio.block.mixins.enrich.enrich_signals import EnrichSignals
+
+from .mssql_base import MSSQLBase
 
 class ParamField(PropertyHolder):
     parameter = Property(

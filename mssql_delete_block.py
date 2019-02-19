@@ -1,7 +1,7 @@
 from nio.properties import VersionProperty, StringProperty
 from nio.signal.base import Signal
 
-from .mssql_base import MSSQLTabledBase
+from .mssql_tabled_base import MSSQLTabledBase
 from .mssql_conditions import MSSQLConditions
 
 

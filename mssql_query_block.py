@@ -2,7 +2,7 @@ from nio.properties import VersionProperty, StringProperty
 from nio.block.terminals import output
 from nio.block.mixins.enrich.enrich_signals import EnrichSignals
 
-from .mssql_base import MSSQLTabledBase
+from .mssql_tabled_base import MSSQLTabledBase
 from .mssql_conditions import MSSQLConditions
 
 
