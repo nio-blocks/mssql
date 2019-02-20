@@ -1,7 +1,7 @@
 from nio.properties import (StringProperty)
 from nio.util.discovery import not_discoverable
 
-from mssql_base import MSSQLBase
+from .mssql_base import MSSQLBase
 
 
 @not_discoverable
