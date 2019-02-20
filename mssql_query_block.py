@@ -12,7 +12,7 @@ class MSSQLQuery(EnrichSignals, MSSQLTabledBase, MSSQLConditions):
 
     version = VersionProperty("1.0.1")
 
-    def process_signals(self, signals, **kwargs):
+    def process_signals(self, signals):
         if self.is_connecting:
             self.logger.error('Connection already in progress. Dropping signals.')
             return

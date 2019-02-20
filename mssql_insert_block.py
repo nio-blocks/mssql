@@ -7,7 +7,7 @@ class MSSQLInsert(EnrichSignals, MSSQLTabledBase):
     version = VersionProperty("1.0.1")
     row = Property(title='Row', default='{{ $.to_dict() }}', order=2)
 
-    def process_signals(self, signals, **kwargs):
+    def process_signals(self, signals):
         if self.is_connecting:
             self.logger.error('Connection already in progress. Dropping signals.')
             return
