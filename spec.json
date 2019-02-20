@@ -1,31 +1,32 @@
 {
   "nio/MSSQLDelete": {
-    "version": "0.2.0",
+    "version": "1.0.0",
     "description": "Creates a cursor object for an incoming signal and executes one command per signal.",
     "categories": [
       "Database"
     ],
     "properties": {
-      "command": {
-        "title": "Command",
-        "type": "Type",
-        "description": "",
-        "default": "DELETE * from {{ $table }}"
-      },
-      "credentials": {
-        "title": "Connection Credentials",
+      "connection": {
+        "title": "Database Connection",
         "type": "ObjectType",
-        "description": "UID and PWD used for database authentication",
+        "description": "Connection Details",
         "default": {
-          "userid": null,
-          "password": null
+          "user_id": "[[MSSQL_USER]]",
+          "password": "[[MSSQL_PWD]]",
+          "server": "[[MSSQL_SERVER]]",
+          "port": "[[MSSQL_PORT]]",
+          "database": "[[MSSQL_DB]]",
+          "mars": false
         }
       },
-      "database": {
-        "title": "Database",
-        "type": "StringType",
-        "description": "name of database to connect to",
-        "default": null
+      "enrich": {
+        "title": "Signal Enrichment",
+        "type": "ObjectType",
+        "description": "enable signal enrichment",
+        "default": {
+          "enrich_field": "",
+          "exclude_existing": true
+        }
       },
       "id": {
         "title": "Id",
@@ -33,22 +34,16 @@
         "description": "block id",
         "default": null
       },
-      "mars": {
-        "title": "Enable Multiple Active Result Sets",
-        "type": "BoolType",
-        "description": "Enable MARS for SQL database connections",
-        "default": false
-      },
-      "port": {
-        "title": "Port",
-        "type": "IntType",
-        "description": "server port number",
-        "default": null
-      },
-      "server": {
-        "title": "Server",
+      "table": {
+        "title": "Target Table",
         "type": "StringType",
-        "description": "server hostname or address",
+        "description": "Database table to be affected",
+        "default": "MyTable"
+      },
+      "conditions": {
+        "title": "Conditions",
+        "type": "ListType",
+        "description": "List of conditions to be met for items to be deleted",
         "default": null
       }
     },
@@ -65,26 +60,24 @@
     "commands": {}
   },
   "nio/MSSQLInsert": {
-    "version": "0.2.0",
+    "version": "1.0.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.",
     "categories": [
       "Database"
     ],
     "properties": {
-      "credentials": {
-        "title": "Connection Credentials",
+      "connection": {
+        "title": "Database Connection",
         "type": "ObjectType",
-        "description": "UID and PWD used for database authentication",
+        "description": "Connection Details",
         "default": {
-          "userid": null,
-          "password": null
+          "user_id": "[[MSSQL_USER]]",
+          "password": "[[MSSQL_PWD]]",
+          "server": "[[MSSQL_SERVER]]",
+          "port": "[[MSSQL_PORT]]",
+          "database": "[[MSSQL_DB]]",
+          "mars": false
         }
-      },
-      "database": {
-        "title": "Database",
-        "type": "StringType",
-        "description": "name of database to connect to",
-        "default": null
       },
       "enrich": {
         "title": "Signal Enrichment",
@@ -101,35 +94,17 @@
         "description": "block id",
         "default": null
       },
-      "mars": {
-        "title": "Enable Multiple Active Result Sets",
-        "type": "BoolType",
-        "description": "Enable MARS for SQL database connections",
-        "default": false
-      },
-      "port": {
-        "title": "Port",
-        "type": "IntType",
-        "description": "server port number",
-        "default": null
+      "table": {
+        "title": "Target Table",
+        "type": "StringType",
+        "description": "Database table to be affected",
+        "default": "MyTable"
       },
       "row": {
         "title": "Row",
         "type": "Type",
-        "description": "record to be inserted as `{key: value}` pairs",
+        "description": "Record to be inserted as `{key: value}` pairs",
         "default": "{{ $.to_dict() }}"
-      },
-      "server": {
-        "title": "Server",
-        "type": "StringType",
-        "description": "server hostname or address",
-        "default": null
-      },
-      "table": {
-        "title": "Target Table",
-        "type": "StringType",
-        "description": "database table to be affected",
-        "default": ""
       }
     },
     "inputs": {
@@ -145,26 +120,24 @@
     "commands": {}
   },
   "nio/MSSQLQuery": {
-    "version": "0.2.0",
+    "version": "1.0.0",
     "description": "Creates a cursor object for every list of signals, and executes one query per signal returning all matching records in a new list of signals.",
     "categories": [
       "Database"
     ],
     "properties": {
-      "credentials": {
-        "title": "Connection Credentials",
+      "connection": {
+        "title": "Database Connection",
         "type": "ObjectType",
-        "description": "UID and PWD used for database authentication",
+        "description": "Connection Details",
         "default": {
-          "userid": null,
-          "password": null
+          "user_id": "[[MSSQL_USER]]",
+          "password": "[[MSSQL_PWD]]",
+          "server": "[[MSSQL_SERVER]]",
+          "port": "[[MSSQL_PORT]]",
+          "database": "[[MSSQL_DB]]",
+          "mars": false
         }
-      },
-      "database": {
-        "title": "Database",
-        "type": "StringType",
-        "description": "name of database to connect to",
-        "default": null
       },
       "enrich": {
         "title": "Signal Enrichment",
@@ -181,28 +154,16 @@
         "description": "block id",
         "default": null
       },
-      "mars": {
-        "title": "Enable Multiple Active Result Sets",
-        "type": "BoolType",
-        "description": "Enable MARS for SQL database connections",
-        "default": false
-      },
-      "port": {
-        "title": "Port",
-        "type": "IntType",
-        "description": "server port number",
-        "default": null
-      },
-      "query": {
-        "title": "Query",
-        "type": "Type",
-        "description": "SQL query to execute",
-        "default": "SELECT * from {{ $table }}"
-      },
-      "server": {
-        "title": "Server",
+      "table": {
+        "title": "Target Table",
         "type": "StringType",
-        "description": "server hostname or address",
+        "description": "database table to be affected",
+        "default": "MyTable"
+      },
+      "conditions": {
+        "title": "Conditions",
+        "type": "ListType",
+        "description": "List of conditions to be met for items to be retrieved",
         "default": null
       }
     },
@@ -222,26 +183,33 @@
     "commands": {}
   },
   "nio/MSSQLUpdate": {
-    "version": "0.2.0",
+    "version": "1.0.0",
     "description": "Creates a cursor object for every list of signals, and executes one update per signal",
     "categories": [
       "Database"
     ],
     "properties": {
-      "credentials": {
-        "title": "Connection Credentials",
+      "connection": {
+        "title": "Database Connection",
         "type": "ObjectType",
-        "description": "UID and PWD used for database authentication",
+        "description": "Connection Details",
         "default": {
-          "userid": null,
-          "password": null
+          "user_id": "[[MSSQL_USER]]",
+          "password": "[[MSSQL_PWD]]",
+          "server": "[[MSSQL_SERVER]]",
+          "port": "[[MSSQL_PORT]]",
+          "database": "[[MSSQL_DB]]",
+          "mars": false
         }
       },
-      "database": {
-        "title": "Database",
-        "type": "StringType",
-        "description": "name of database to connect to",
-        "default": null
+      "enrich": {
+        "title": "Signal Enrichment",
+        "type": "ObjectType",
+        "description": "enable signal enrichment",
+        "default": {
+          "enrich_field": "",
+          "exclude_existing": true
+        }
       },
       "id": {
         "title": "Id",
@@ -249,29 +217,23 @@
         "description": "block id",
         "default": null
       },
-      "mars": {
-        "title": "Enable Multiple Active Result Sets",
-        "type": "BoolType",
-        "description": "Enable MARS for SQL database connections",
-        "default": false
-      },
-      "port": {
-        "title": "Port",
-        "type": "IntType",
-        "description": "server port number",
-        "default": null
-      },
-      "server": {
-        "title": "Server",
+      "table": {
+        "title": "Target Table",
         "type": "StringType",
-        "description": "server hostname or address",
+        "description": "database table to be affected",
+        "default": "MyTable"
+      },
+      "conditions": {
+        "title": "Conditions",
+        "type": "ListType",
+        "description": "List of conditions to be met for records to be updated",
         "default": null
       },
-      "update": {
-        "title": "Update command",
-        "type": "Type",
-        "description": "update command to be executed against the SQL database",
-        "default": "UPDATE SET {{ $data }}"
+      "column_values": {
+        "title": "Column Values",
+        "type": "ListType",
+        "description": "List of values to be updated `[{ column: StringProperty, value: Property }]`",
+        "default": "[]"
       }
     },
     "inputs": {
@@ -282,6 +244,69 @@
     "outputs": {
       "default": {
         "description": "the number of rows updated"
+      }
+    },
+    "commands": {}
+  },
+  "nio/MSSQLRawQuery": {
+    "version": "1.0.0",
+    "description": "Creates a cursor object for every list of signals, and creates a parameterized query that sanitizes user inputs.",
+    "categories": [
+      "Database"
+    ],
+    "properties": {
+      "connection": {
+        "title": "Database Connection",
+        "type": "ObjectType",
+        "description": "Connection Details",
+        "default": {
+          "user_id": "[[MSSQL_USER]]",
+          "password": "[[MSSQL_PWD]]",
+          "server": "[[MSSQL_SERVER]]",
+          "port": "[[MSSQL_PORT]]",
+          "database": "[[MSSQL_DB]]",
+          "mars": false
+        }
+      },
+      "enrich": {
+        "title": "Signal Enrichment",
+        "type": "ObjectType",
+        "description": "enable signal enrichment",
+        "default": {
+          "enrich_field": "",
+          "exclude_existing": true
+        }
+      },
+      "id": {
+        "title": "Id",
+        "type": "StringType",
+        "description": "block id",
+        "default": null
+      },
+      "query": {
+        "title": "Query",
+        "type": "Type",
+        "description": "Parameterized SQL query to execute",
+        "default": "SELECT * FROM table where id=?"
+      },
+      "parameters": {
+        "title": "Substitution Parameters",
+        "type": "ListType",
+        "description": "List of parameters that will be substituted into the query.",
+        "default": "{{[]}}"
+      }
+    },
+    "inputs": {
+      "default": {
+        "description": "Any list of signals"
+      }
+    },
+    "outputs": {
+      "No Results": {
+        "description": "A with a null results value"
+      },
+      "Results": {
+        "description": "A signal with an array of results"
       }
     },
     "commands": {}

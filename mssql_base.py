@@ -1,43 +1,39 @@
 import pyodbc
 from nio.block.base import Block
-from nio.properties import (VersionProperty, StringProperty, PropertyHolder,
-                            ObjectProperty, IntProperty, BoolProperty)
+from nio.properties import (StringProperty, IntProperty, BoolProperty, ObjectProperty, PropertyHolder)
 from nio.util.discovery import not_discoverable
 
 
-class Credentials(PropertyHolder):
+class Connection(PropertyHolder):
+    server = StringProperty(title='Server', default='[[MSSQL_SERVER]]', order=1)
+    port = IntProperty(title='Port', default='[[MSSQL_PORT]]', order=2)
+    database = StringProperty(title='Database', default='[[MSSQL_DB]]', order=3)
+    user_id = StringProperty(title='User ID', allow_none=True, default='[[MSSQL_USER]]', order=4)
+    password = StringProperty(title='Password', allow_none=True, default='[[MSSQL_PWD]]', order=5)
 
-    userid = StringProperty(title='User ID', allow_none=True, order=1)
-    password = StringProperty(title="Password", allow_none=True, order=2)
-
+class Mars(PropertyHolder):
+    enabled = BoolProperty(title='Enable MARS?', default=True, order=1)
 
 @not_discoverable
 class MSSQLBase(Block):
-
-    version = VersionProperty('0.1.0')
-    server = StringProperty(title='Server', order=1)
-    port = IntProperty(title='Port', default=1433, order=2)
-    database = StringProperty(title='Database', order=3)
-    credentials = ObjectProperty(Credentials, title='Connection Credentials',
-                                 order=4)
-    table = StringProperty(title='Table', default='{{ $table }}', order=5)
-    mars = BoolProperty(title='Enable Multiple Active Result Sets',
-                        default=False, order=6, advanced=True)
+    connection = ObjectProperty(Connection, title='Database Connection', order=50)
+    mars = ObjectProperty(Mars, title='Multiple Active Result Sets (MARS)', order=60)
 
     def __init__(self):
         super().__init__()
         self.cnxn = None
-        self.cursor = None
-        self.isConnecting = False
-        # maintains a LUT index by table containing a list of columns for it
-        self._table_colums = {}
+        self.is_connecting = False
 
     def configure(self, context):
         super().configure(context)
         self.connect()
 
     def connect(self):
-        self.isConnecting = True
+        self.is_connecting = True
+
+        cnxn_props = self.connection()
+        mars_enabled = self.mars().enabled()
+
         cnxn_string = (
             'DRIVER={};'
             'PORT={};'
@@ -47,15 +43,15 @@ class MSSQLBase(Block):
             'MARS_Connection={};'
             'PWD={}').format(
                 '{ODBC Driver 17 for SQL Server}',
-                self.port(),
-                self.server(),
-                self.database(),
-                self.credentials().userid(),
-                'yes' if self.mars() else 'no',
-                self.credentials().password())
+                cnxn_props.port(),
+                cnxn_props.server(),
+                cnxn_props.database(),
+                cnxn_props.user_id(),
+                'yes' if mars_enabled else 'no',
+                cnxn_props.password())
         self.logger.debug('Connecting: {}'.format(cnxn_string))
         self.cnxn = pyodbc.connect(cnxn_string)
-        self.isConnecting = False
+        self.is_connecting = False
 
     def disconnect(self):
         if self.cnxn:
@@ -66,26 +62,10 @@ class MSSQLBase(Block):
         super().stop()
         self.disconnect()
 
-    def validate_column(self, column, table, cursor):
-        """ Makes sure column belongs to table
-
-        Args:
-            column (str): column in question
-            table (str): table name
-            cursor (pyodbc.Cursor): active cursor
-
-        Returns:
-            True/False
-        """
-        columns = self._table_colums.get(table)
-        if columns is None:
-            columns = [column.column_name for column in cursor.columns(table)]
-            self._table_colums[table] = columns
-
-        if column not in columns:
-            cursor.close()
-            raise ValueError(
-                '\"{}\" is not a valid column in table \"{}\".'.format(
-                    column, table))
-
-        return column
+    def _get_cursor(self):
+        try:
+            return self.cnxn.cursor()
+        except Exception as e:
+            self.disconnect()
+            self.connect()
+            return self.cnxn.cursor()

@@ -14,14 +14,22 @@ class TestMSSQL(NIOBlockTestCase):
     _uid = 'user'
     _pw = 'pw'
     _driver = '{ODBC Driver 17 for SQL Server}'
-    _mars= False
+    _mars= True
     config = {
-        'server': _host,
-        'port': _port,
-        'database': _db,
-        'mars': _mars,
-        'credentials': {'userid': _uid, 'password': _pw},
-        'table': '{{ $table }}',
+      'connection': {
+          'server': _host,
+          'port': _port,
+          'database': _db,
+          'user_id': _uid,
+          'password': _pw,
+        },
+        'enrich': {
+          'exclude_existing': False
+        },
+        'mars': {
+          'enabled': _mars
+        },
+        'table': 'testTable',
         'conditions': []
     }
 
@@ -35,12 +43,10 @@ class TestMSSQL(NIOBlockTestCase):
         blk = MSSQLDelete()
         self.configure_block(blk, self.config)
         blk.start()
-        blk.process_signals([Signal({'table': 'testTable'})])
+        blk.process_signals([Signal({'a': '1'})])
         blk.stop()
         self.assert_num_signals_notified(1)
-        self.assertDictEqual(
-            self.last_notified[DEFAULT_TERMINAL][0].to_dict(),
-            {'Rows deleted': 5})
+        self.assertDictEqual(self.last_notified[DEFAULT_TERMINAL][0].to_dict(), {'Rows deleted': 5})
         mock_odbc.connect.assert_called_once_with(
             'DRIVER={};'
             'PORT={};'
@@ -54,11 +60,10 @@ class TestMSSQL(NIOBlockTestCase):
                 self._host,
                 self._db,
                 self._uid,
-                'no',
+                'yes',
                 self._pw))
         self.assertEqual(mock_cnxn.cursor.call_count, 1)
-        mock_cursor.execute.assert_called_once_with(
-            'DELETE FROM testTable', [])
+        mock_cursor.execute.assert_called_once_with('DELETE FROM testTable', [])
         self.assertEqual(mock_cursor.close.call_count, 1)
         self.assertEqual(mock_cnxn.close.call_count, 1)
 

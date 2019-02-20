@@ -4,14 +4,10 @@ Creates a cursor object for an incoming signal and executes one command per sign
 
 Properties
 ----------
-- **conditions**: search condition
-- **credentials**: UID and PWD used for database authentication
-- **database**: name of databse to connect to
-- **id**: block id
-- **mars**: Enable MARS for SQL database connections
-- **port**: server port number
-- **server**: server hostname or address
-- **table**: database table to be affected
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: search condition
 
 Inputs
 ------
@@ -38,15 +34,10 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **credentials**: UID and PWD used for database authentication
-- **database**: name of database to connect to
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **mars**: Enable MARS for SQL database connections
-- **port**: server port number
-- **row**: record to be inserted as `{key: value}` pairs
-- **server**: server hostname or address
-- **table**: database table to be affected
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Row**: record to be inserted as `{key: value}` pairs
 
 Inputs
 ------
@@ -73,15 +64,10 @@ Creates a cursor object for every list of signals, and executes one query per si
 
 Properties
 ----------
-- **conditions**: search condition
-- **credentials**: UID and PWD used for database authentication
-- **database**: name of database to connect to
-- **enrich**: enable signal enrichment
-- **id**: block id
-- **mars**: Enable MARS for SQL database connections
-- **port**: server port number
-- **server**: server hostname or address
-- **table**: database table to be affected
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: conditions to be met for items to be retrieved
 
 Inputs
 ------
@@ -90,7 +76,7 @@ Inputs
 Outputs
 -------
 - **No Results**: One signal, with a return value null
-- **Results**: One signal per list of signals processed, with the attribute inserted containing the number of records inserted 
+- **Results**: One signal per list of signals processed, with the attribute inserted containing the number of records inserted
 
 Commands
 --------
@@ -109,15 +95,11 @@ Creates a cursor object for every list of signals, and executes one update per s
 
 Properties
 ----------
-- **column_values**: specify columns and values to assign
-- **conditions**: search condition
-- **credentials**: UID and PWD used for database authentication
-- **database**: name of database to connect to
-- **id**: block id
-- **mars**: Enable MARS for SQL database connections
-- **port**: server port number
-- **server**: server hostname or address
-- **table**: database table to be affected
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Table**: database table to be affected
+- **Conditions**: conditions to be met for records to be updated
+- **Column Values**: list of values to be updated
 
 Inputs
 ------
@@ -130,4 +112,35 @@ Outputs
 Commands
 --------
 None
+
+***
+
+MSSQLRawQuery
+=============
+Creates a cursor object for every list of signals, and executes one query per signal. Changes are committed automatically for each list of signals. When changes are committed, all active cursors (i.e. lists of signals) for that connection (i.e. instance of the block) are committed simultaneously. To avoid this behavior use multiple instances of the block.
+
+Properties
+----------
+- **Database Connection**: Server, Port, Database, User ID, Password, Enable Multiple Active Result Sets
+- **Signal Enrichment**: enable signal enrichment
+- **Parameterized Query**: parameterized SQL query to execute (use ? for any user-supplied values)
+- **Substitution Parameters**: parameters that will be substituted into the query ((As List, In Order))
+
+Inputs
+------
+- **default**: any list of signals
+
+Outputs
+-------
+- **results**: A signal with an array of results
+- **no_results**: A signal with a null results key
+
+Commands
+--------
+None
+
+Dependencies
+------------
+- pyodbc
+- [Microsoft ODBC Driver 17 for SQL Server](https://www.microsoft.com/en-us/download/details.aspx?id=56567)
 

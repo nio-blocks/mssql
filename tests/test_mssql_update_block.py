@@ -16,11 +16,19 @@ class TestMSSQLUpdate(NIOBlockTestCase):
     _driver = '{ODBC Driver 17 for SQL Server}'
     _mars=True
     config = {
-        'server': _host,
-        'port': _port,
-        'database': _db,
-        'mars': _mars,
-        'credentials': {'userid': _uid, 'password': _pw},
+        'connection': {
+          'server': _host,
+          'port': _port,
+          'database': _db,
+          'user_id': _uid,
+          'password': _pw,
+        },
+        'enrich': {
+          'exclude_existing': False
+        },
+        'mars': {
+          'enabled': _mars
+        },
         'column_values': [],
         'conditions': []
     }
